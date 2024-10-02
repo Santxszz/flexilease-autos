@@ -16,9 +16,11 @@ export class User {
     name: string;
 
     @Column()
+    @Exclude()
     cpf: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column()
