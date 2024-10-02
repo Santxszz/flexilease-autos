@@ -5,6 +5,7 @@ import BaseJoi, { type Extension, type Root } from "joi";
 import joiDate from "@joi/date";
 import UserController from "@api/controllers/UserController";
 import authenticateToken from "@api/middlewares/Authenticated";
+import checkUserAuth from "@api/middlewares/CheckUserAuth";
 const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 
 const userRoutes = express.Router();
@@ -55,6 +56,8 @@ userRoutes.put(
 			id: Joi.number().required(),
 		},
 	}),
+    authenticateToken,
+    checkUserAuth,
 	userController.update,
 );
 
@@ -67,6 +70,7 @@ userRoutes.delete(
 		},
 	}),
 	authenticateToken,
+    checkUserAuth,
 	userController.delete,
 );
 
@@ -79,10 +83,8 @@ userRoutes.get(
 		},
 	}),
     authenticateToken,
+    checkUserAuth,
     userController.show
 );
-
-// Test Auth Middleware
-userRoutes.get("/user", authenticateToken);
 
 export default userRoutes;
