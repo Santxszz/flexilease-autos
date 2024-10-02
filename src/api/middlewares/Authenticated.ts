@@ -8,12 +8,13 @@ export default async function authenticateToken(
 	next: NextFunction,
 ) {
 	const jwt = req.headers.authorization;
+    const bearerToken = jwt?.split(" ")[1];
 	if (!jwt) {
-		return res.status(401).json({ Error: "Token is Invalid or Not Provided!" });
+		throw new AppError("Token not informed!", 403);
 	}
-	jwtToken.verify(String(jwt), process.env.JWT_SECRET as string, (err) => {
+	jwtToken.verify(String(bearerToken), process.env.JWT_SECRET as string, (err) => {
 		if (err) {
-			throw new AppError("Token provided is invalid!", 403, "Forbidden");
+			throw new AppError("Token provided is invalid!", 403);
 		}
 		next();
 	});
