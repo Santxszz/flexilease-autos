@@ -2,13 +2,14 @@ import { AppDataSource } from "@database/index";
 
 import User from "@database/entities/User";
 import AppError from "@api/middlewares/AppError";
+import dayjs from "dayjs";
 
 interface IParamas {
 	id: number;
 }
 
 export default class ShowUserInfoService {
-	public async execute({ id }: IParamas): Promise<User> {
+	public async execute({ id }: IParamas) {
 		const userRepository = AppDataSource.getRepository(User);
 		const userShow = await userRepository.findOne({ where: { id } });
 
@@ -16,6 +17,21 @@ export default class ShowUserInfoService {
 			throw new AppError("User not found.", 404);
 		}
         
-        return userShow
+        const userObjectResponse = {
+			id: userShow.id,
+			name: userShow.name,
+			cpf: userShow.cpf,
+			birth: dayjs(userShow.birth).format("DD/MM/YYYY"),
+			email: userShow.email,
+			qualified: !!userShow.qualified,
+			cep: userShow.cep,
+			neighbordhood: userShow.neighbordhood,
+			street: userShow.street,
+			complement: userShow.complement,
+			city: userShow.city,
+			uf: userShow.uf,
+		};
+
+        return userObjectResponse
 	}
 }

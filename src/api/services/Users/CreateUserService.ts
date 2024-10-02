@@ -66,7 +66,7 @@ export default class CreateUserService {
 			cpf: userCreated.cpf,
 			birth: dayjs(userCreated.birth).format("DD/MM/YYYY"),
 			email: userCreated.email,
-			qualified: userCreated.qualified ? "Qualificado" : "Não Qualificado",
+			qualified: !!userCreated.qualified,
 			cep: userCreated.cep,
 			neighbordhood: userCreated.neighbordhood,
 			street: userCreated.street,

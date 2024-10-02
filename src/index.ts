@@ -10,6 +10,7 @@ import "@database/index";
 import AppError from "@api/middlewares/AppError";
 
 import userRoutes from "./routes/Users.routes";
+import carRoutes from "@routes/Cars.routes";
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/v1", userRoutes);
+app.use("/v1", carRoutes);
 app.use("/v1/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 
 app.use(errors());
