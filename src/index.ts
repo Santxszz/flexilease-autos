@@ -11,6 +11,7 @@ import AppError from "@api/middlewares/AppError";
 
 import userRoutes from "./routes/Users.routes";
 
+
 const app = express();
 
 app.use(express.json());
