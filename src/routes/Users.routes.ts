@@ -36,10 +36,41 @@ userRoutes.post(
 			password: Joi.string().required(),
 		},
 	}),
-    userController.auth
+	userController.auth,
+);
+
+// Update User Informations
+userRoutes.put(
+	"/user/:id",
+	celebrate({
+		[Segments.BODY]: {
+			name: Joi.string().optional(),
+			cpf: Joi.string().optional(),
+			birth: Joi.date().format("DD/MM/YYYY").optional(),
+			cep: Joi.string().optional(),
+			email: Joi.string().email().optional(),
+			password: Joi.string().optional(),
+		},
+		[Segments.PARAMS]: {
+			id: Joi.number().required(),
+		},
+	}),
+	userController.update,
+);
+
+// Delete a specific user
+userRoutes.delete(
+	"/user/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().required(),
+		},
+	}),
+    authenticateToken,
+    userController.delete
 );
 
 // Test Auth Middleware
-userRoutes.get('/user', authenticateToken)
+userRoutes.get("/user", authenticateToken);
 
 export default userRoutes;
