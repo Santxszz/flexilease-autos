@@ -14,6 +14,8 @@ class AppError {
             case 400:
                 this.statusMessage = "Bad Request."
                 break;
+            case 401:
+                this.statusMessage = "Unauthorized"
             
         }
     }
