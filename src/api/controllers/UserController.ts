@@ -11,6 +11,7 @@ import UserAuthService from "@api/services/Users/UserAuthService";
 import UpdateUserService from "@api/services/Users/UpdateUserService";
 import type JwtPayload from "@api/interfaces/InterfaceJwtPayload";
 import DeleteUserService from "@api/services/Users/DeleteUserService";
+import ShowUserInfoService from "@api/services/Users/ShowUserInfoService";
 
 export default class UserController {
 	public async create(req: Request, res: Response): Promise<Response> {
@@ -61,6 +62,7 @@ export default class UserController {
 	public async update(req: Request, res: Response): Promise<Response> {
 		const { name, cpf, birth, cep, email, password } = req.body;
 		const id = Number(req.params.id);
+
 		const userToken = req.headers.authorization;
 
 		jwt.verify(
@@ -77,6 +79,19 @@ export default class UserController {
 			},
 		);
 
+        const apiViaCep = axios.create({
+			baseURL: "https://viacep.com.br/ws/",
+			timeout: 1000,
+			validateStatus: (status) => {
+				return status >= 200 && status < 500;
+			},
+		});
+
+		const resultViaCep = await apiViaCep.get(`${cep}/json`);
+		if (resultViaCep.status !== 200) {
+			throw new AppError("Cep is invalid", 400);
+		}
+
 		const userService = new UpdateUserService();
 		const updatedUser = await userService.execute({
 			name,
@@ -85,6 +100,11 @@ export default class UserController {
 			cep,
 			email,
 			password,
+            city: resultViaCep.data.localidade,
+			complement: resultViaCep.data.complemento,
+			neighbordhood: resultViaCep.data.bairro,
+			street: resultViaCep.data.logradouro,
+			uf: resultViaCep.data.uf,
 			id,
 		});
 
@@ -113,4 +133,27 @@ export default class UserController {
 		await userService.execute({ id });
 		return res.status(204).json();
 	}
+
+    public async show(req: Request, res: Response): Promise<Response> {
+        const userToken = req.headers.authorization;
+		const id = Number(req.params.id);
+
+		jwt.verify(
+			userToken as string,
+			process.env.JWT_SECRET as string,
+			(err, userInfo) => {
+				if (err) {
+					throw new AppError("Token is Invalid", 400);
+				}
+				const tokenPayload = userInfo as JwtPayload;
+				if (tokenPayload.userId !== id) {
+					throw new AppError("Not Authorized", 401);
+				}
+			},
+		);
+
+		const userService = new ShowUserInfoService();
+		const usetShow = await userService.execute({ id });
+		return res.status(200).json(instanceToInstance(usetShow));
+    }
 }
