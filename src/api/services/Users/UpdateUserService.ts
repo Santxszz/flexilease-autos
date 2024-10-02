@@ -29,14 +29,34 @@ export default class UpdateUserService {
 			throw new AppError("User is not found", 404);
 		}
 
-		const emailExists = await userRepository.findOne({ where: { email } });
-		if (emailExists && email !== userExists.email) {
-			throw new AppError("The email is already registered", 400);
+		if (!email) {
+			const emailExists = await userRepository.findOne({ where: { email } });
+			email = userExists?.email;
+			if (emailExists && email !== userExists.email) {
+				throw new AppError("The email is already registered", 400);
+			}
+		} else {
+			const emailExists = await userRepository.findOne({ where: { email } });
+			if (emailExists && email !== userExists.email) {
+				throw new AppError("The email is already registered", 400);
+			}
 		}
 
-		const cpfExists = await userRepository.findOne({ where: { cpf } });
-		if (cpfExists && cpf !== userExists.cpf) {
-			throw new AppError("The cpf is already registered", 400);
+		if (!cpf) {
+			const cpfExists = await userRepository.findOne({
+				where: { cpf: userExists?.cpf },
+			});
+			cpf = userExists?.cpf;
+			if (cpfExists && cpf !== cpfExists.cpf) {
+				throw new AppError("The cpf is already registered", 400);
+			}
+		} else {
+			const cpfExists = await userRepository.findOne({
+				where: { cpf: userExists?.cpf },
+			});
+			if (cpfExists && cpf !== cpfExists.cpf) {
+				throw new AppError("The cpf is already registered", 400);
+			}
 		}
 
 		const hashedPassword = await bcrypt.hash(String(password), 8);
