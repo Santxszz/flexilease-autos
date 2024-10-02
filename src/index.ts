@@ -22,6 +22,7 @@ app.use("/v1/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 
 app.use(errors());
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
     if (error instanceof AppError) {
         return response.status(error.statusCode).json({
@@ -36,6 +37,7 @@ app.use((error: Error, request: Request, response: Response, next: NextFunction)
         status: "Internal Server Error",
         message: "Ocorreu um erro inesperado",
     });
+    
 });
 
 const PORT = process.env.PORT_SERVER || 3000;
