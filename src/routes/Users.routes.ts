@@ -66,8 +66,20 @@ userRoutes.delete(
 			id: Joi.number().required(),
 		},
 	}),
+	authenticateToken,
+	userController.delete,
+);
+
+// Show a specific user
+userRoutes.get(
+	"/user/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.string().required(),
+		},
+	}),
     authenticateToken,
-    userController.delete
+    userController.show
 );
 
 // Test Auth Middleware
