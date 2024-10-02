@@ -63,22 +63,6 @@ export default class UserController {
 		const { name, cpf, birth, cep, email, password } = req.body;
 		const id = Number(req.params.id);
 
-		const userToken = req.headers.authorization;
-
-		jwt.verify(
-			userToken as string,
-			process.env.JWT_SECRET as string,
-			(err, userInfo) => {
-				if (err) {
-					throw new AppError("Token is Invalid", 400);
-				}
-				const tokenPayload = userInfo as JwtPayload;
-				if (tokenPayload.userId !== id) {
-					throw new AppError("Not Authorized", 401);
-				}
-			},
-		);
-
         const apiViaCep = axios.create({
 			baseURL: "https://viacep.com.br/ws/",
 			timeout: 1000,
@@ -112,22 +96,7 @@ export default class UserController {
 	}
 
 	public async delete(req: Request, res: Response): Promise<Response> {
-		const userToken = req.headers.authorization;
 		const id = Number(req.params.id);
-
-		jwt.verify(
-			userToken as string,
-			process.env.JWT_SECRET as string,
-			(err, userInfo) => {
-				if (err) {
-					throw new AppError("Token is Invalid", 400);
-				}
-				const tokenPayload = userInfo as JwtPayload;
-				if (tokenPayload.userId !== id) {
-					throw new AppError("Not Authorized", 401);
-				}
-			},
-		);
 
 		const userService = new DeleteUserService();
 		await userService.execute({ id });
@@ -135,23 +104,7 @@ export default class UserController {
 	}
 
     public async show(req: Request, res: Response): Promise<Response> {
-        const userToken = req.headers.authorization;
 		const id = Number(req.params.id);
-
-		jwt.verify(
-			userToken as string,
-			process.env.JWT_SECRET as string,
-			(err, userInfo) => {
-				if (err) {
-					throw new AppError("Token is Invalid", 400);
-				}
-				const tokenPayload = userInfo as JwtPayload;
-				if (tokenPayload.userId !== id) {
-					throw new AppError("Not Authorized", 401);
-				}
-			},
-		);
-
 		const userService = new ShowUserInfoService();
 		const usetShow = await userService.execute({ id });
 		return res.status(200).json(instanceToInstance(usetShow));
