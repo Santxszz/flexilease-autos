@@ -17,7 +17,7 @@ export default class CreateCarService {
 		acessories,
 		numberOfPassengers,
 	}: InterfaceRequestCarCreate) {
-		const userRepository = AppDataSource.getRepository(Car);
+		const carRepository = AppDataSource.getRepository(Car);
 
 		const acessoriesArray = [];
 		for (let i = 0; i < acessories.length; i++) {
@@ -34,7 +34,7 @@ export default class CreateCarService {
 			throw new AppError("Requires at least one accessory!");
 		}
 
-		const createCar = userRepository.create({
+		const createCar = carRepository.create({
 			model,
 			color,
 			year,
@@ -43,7 +43,7 @@ export default class CreateCarService {
 			numberOfPassengers,
 		});
 
-		await userRepository.save(createCar);
+		await carRepository.save(createCar);
 
 		const resultObjectCar = {
 			id: createCar.id,

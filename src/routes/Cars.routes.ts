@@ -24,8 +24,54 @@ carRoutes.post(
 			numberOfPassengers: Joi.number().required().min(1),
 		},
 	}),
-    authenticateToken,
+	authenticateToken,
 	carController.create,
 );
+
+// List all cars
+carRoutes.get(
+	"/car",
+	celebrate({
+		[Segments.QUERY]: {
+			page: Joi.number().min(1).optional(),
+			limit: Joi.number().min(1).optional(),
+			model: Joi.string().optional(),
+			color: Joi.string().optional(),
+			year: Joi.number().optional(),
+			valuePerDay: Joi.number().optional().min(1),
+			acessories: Joi.array().unique().optional(),
+			numberOfPassengers: Joi.number().optional().min(1),
+		},
+	}),
+	authenticateToken,
+	carController.listAll,
+);
+
+// Delete a specific car
+carRoutes.delete(
+	"/car/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().required(),
+		},
+	}),
+    authenticateToken,
+    carController.delete
+);
+
+// // Updated a specific car
+// carRoutes.put(
+// 	"/car/:id",
+// 	celebrate({
+// 		[Segments.BODY]: {
+// 			model: Joi.string().optional(),
+// 			color: Joi.string().optional(),
+// 			year: Joi.number().optional(),
+// 			valuePerDay: Joi.number().optional().min(1),
+// 			acessories: Joi.array().unique().optional(),
+// 			numberOfPassengers: Joi.number().optional().min(1),
+// 		},
+// 	}),
+// );
 
 export default carRoutes;
