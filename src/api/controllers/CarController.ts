@@ -5,6 +5,8 @@ import { instanceToInstance } from "class-transformer";
 import CreateCarService from "@api/services/Cars/CreateCarService";
 import ListAllCarService from "@api/services/Cars/ListAllCarService";
 import DeleteCarService from "@api/services/Cars/DeleteCarService";
+import UpdateCarService from "@api/services/Cars/UpdateCarService";
+import ShowCarService from "@api/services/Cars/ShowCarService";
 
 export default class CarController {
 	public async create(req: Request, res: Response): Promise<Response> {
@@ -30,7 +32,7 @@ export default class CarController {
 
 		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
 			req.query;
-		let search = undefined;
+		let search: string | number | string[] | undefined;
 		if (model) {
 			search = model as string;
 		}
@@ -61,7 +63,7 @@ export default class CarController {
 			search as undefined,
 		);
 
-		return res.status(200).json(cars);
+		return res.status(200).json(instanceToInstance(cars));
 	}
 
 	public async delete(req: Request, res: Response): Promise<Response> {
@@ -70,4 +72,29 @@ export default class CarController {
 		await carService.execute({ id });
 		return res.status(204).json();
 	}
+
+	public async update(req: Request, res: Response): Promise<Response> {
+		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
+			req.body;
+		const id = Number(req.params.id);
+
+		const carService = new UpdateCarService();
+		const updateCar = await carService.execute({
+			model,
+			color,
+			year,
+			valuePerDay,
+			acessories,
+			numberOfPassengers,
+			id,
+		});
+        return res.status(200).json(updateCar)
+	}
+
+    public async show(req: Request, res: Response): Promise<Response> {
+        const id = Number(req.params.id)
+        const carService = new ShowCarService();
+        const showCar = await carService.execute(id)
+        return res.status(200).json(showCar)
+    }
 }
