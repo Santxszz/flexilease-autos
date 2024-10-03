@@ -55,23 +55,37 @@ carRoutes.delete(
 			id: Joi.number().required(),
 		},
 	}),
-    authenticateToken,
-    carController.delete
+	authenticateToken,
+	carController.delete,
 );
 
-// // Updated a specific car
-// carRoutes.put(
-// 	"/car/:id",
-// 	celebrate({
-// 		[Segments.BODY]: {
-// 			model: Joi.string().optional(),
-// 			color: Joi.string().optional(),
-// 			year: Joi.number().optional(),
-// 			valuePerDay: Joi.number().optional().min(1),
-// 			acessories: Joi.array().unique().optional(),
-// 			numberOfPassengers: Joi.number().optional().min(1),
-// 		},
-// 	}),
-// );
+// Updated a specific car
+carRoutes.put(
+	"/car/:id",
+	celebrate({
+		[Segments.BODY]: {
+			model: Joi.string().optional(),
+			color: Joi.string().optional(),
+			year: Joi.number().optional(),
+			valuePerDay: Joi.number().optional().min(1),
+			acessories: Joi.array().unique().optional(),
+			numberOfPassengers: Joi.number().optional().min(1),
+		},
+	}),
+	authenticateToken,
+	carController.update,
+);
+
+// Show a specific car
+carRoutes.get(
+	"/car/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().min(1).required(),
+		},
+	}),
+    authenticateToken,
+    carController.show
+);
 
 export default carRoutes;
