@@ -1,3 +1,195 @@
 {
-   
-}
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "FlexiLease Autos API",
+      "description": "A REST API that controls the actions of a car rental company with extreme skill"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/v1/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Cars",
+        "description": "All controller of cars modules."
+      }
+    ],
+    "paths": {
+      "/car": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Create a new car",
+          "description": "That's endpoint make the creation of a new car in the system.",
+          "requestBody": {
+            "description": "Car Request Body ALL Required!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "model",
+                    "color",
+                    "year",
+                    "valuePerDay",
+                    "acessories",
+                    "numberOfPassengers"
+                  ],
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "example": "Honda Civic"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "black"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2009
+                    },
+                    "acessories": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        {
+                          "name": "Sound"
+                        },
+                        {
+                          "name": "Solar"
+                        }
+                      ]
+                    },
+                    "numberOfPassengers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The acessories not accept another syntax! Please use [ acessories: {name: value} ] <br> The year of vehicle is invalid, must be between 1950-2023! <br> Requires at least one accessory! <br> Validate Error"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/car/{id}": {
+        "delete": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Create a new car",
+          "description": "That's endpoint make the creation of a new car in the system.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No content"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "Car": {
+          "type": "object",
+          "required": [
+            "id",
+            "model",
+            "color",
+            "year",
+            "valuePerDay",
+            "acessories",
+            "numberOfPassengers"
+          ],
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "model": {
+              "type": "string",
+              "example": "Honda Civic"
+            },
+            "color": {
+              "type": "string",
+              "example": "black"
+            },
+            "year": {
+              "type": "number",
+              "example": 2009
+            },
+            "acessories": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "name": "Sound"
+                },
+                {
+                  "name": "Solar"
+                }
+              ]
+            },
+            "numberOfPassengers": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
