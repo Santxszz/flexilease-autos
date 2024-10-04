@@ -6,7 +6,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --coverage --runInBand --forceExit --verbose=true",
+    "test": "jest --coverage --runInBand --forceExit",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/server.ts",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
