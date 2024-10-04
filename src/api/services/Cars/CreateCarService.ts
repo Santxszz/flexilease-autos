@@ -35,7 +35,7 @@ export default class CreateCarService {
 		}
 
 		if (acessories.length < 1) {
-			throw new AppError("Requires at least one accessory!");
+			throw new AppError("Requires at least one accessory!", 400);
 		}
 
 		const createCar = carRepository.create({
