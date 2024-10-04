@@ -1,5 +1,3 @@
-import axios from "axios";
-import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
 import { instanceToInstance } from "class-transformer";
 import CreateCarService from "@api/services/Cars/CreateCarService";
