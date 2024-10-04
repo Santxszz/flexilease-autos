@@ -1,5 +1,6 @@
 import { getDataSource } from "@database/index";
 import Car from "@database/entities/Car";
+import { Like } from "typeorm";
 
 export default class ListAllCarService {
 	public async execute(
@@ -19,14 +20,32 @@ export default class ListAllCarService {
 				.orWhere({ color: search })
 				.orWhere({ year: search })
 				.orWhere({ valuePerDay: search })
-				.orWhere({ acessories: search })
+				.orWhere({ acessories: Like(`%${search}%`) })
 				.orWhere({ numberOfPassengers: search })
-
 				.take(10)
 				.getManyAndCount();
 
+			let objectCarArray: any = [];
+			cars.map((item) => {
+				let carAcessories: any = [];
+				item.acessories.map((x) => {
+					carAcessories.push({ name: x });
+				});
+
+				const carsObject = {
+					id: item.id,
+					model: item.model,
+					color: item.color,
+					year: item.year,
+					valuePerDay: item.valuePerDay,
+					acessories: carAcessories,
+					numberOfPassengers: item.numberOfPassengers,
+				};
+				objectCarArray.push(carsObject);
+			});
+
 			const result = {
-				car: cars,
+				car: objectCarArray,
 				total: count,
 				limit: 10,
 				offset: 1,
@@ -44,14 +63,32 @@ export default class ListAllCarService {
 				.orWhere({ color: search })
 				.orWhere({ year: search })
 				.orWhere({ valuePerDay: search })
-				.orWhere({ acessories: search })
+				.orWhere({ acessories: Like(`%${search}%`) })
 				.orWhere({ numberOfPassengers: search })
-
 				.take(take)
 				.getManyAndCount();
 
+			let objectCarArray: any = [];
+			cars.map((item) => {
+				let carAcessories: any = [];
+				item.acessories.map((x) => {
+					carAcessories.push({ name: x });
+				});
+
+				const carsObject = {
+					id: item.id,
+					model: item.model,
+					color: item.color,
+					year: item.year,
+					valuePerDay: item.valuePerDay,
+					acessories: carAcessories,
+					numberOfPassengers: item.numberOfPassengers,
+				};
+				objectCarArray.push(carsObject);
+			});
+
 			const result = {
-				car: cars,
+				car: objectCarArray,
 				total: count,
 				limit: take,
 				offset: page,
@@ -67,8 +104,27 @@ export default class ListAllCarService {
 			.take(take ? take : 10)
 			.getManyAndCount();
 
+		let objectCarArray: any = [];
+		cars.map((item) => {
+			let carAcessories: any = [];
+			item.acessories.map((x) => {
+				carAcessories.push({ name: x });
+			});
+
+			const carsObject = {
+				id: item.id,
+				model: item.model,
+				color: item.color,
+				year: item.year,
+				valuePerDay: item.valuePerDay,
+				acessories: carAcessories,
+				numberOfPassengers: item.numberOfPassengers,
+			};
+			objectCarArray.push(carsObject);
+		});
+
 		const result = {
-			car: cars,
+			car: objectCarArray,
 			total: count,
 			limit: take ? take : 10,
 			offset: page ? page : 1,

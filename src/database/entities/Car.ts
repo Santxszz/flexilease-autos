@@ -24,7 +24,7 @@ export class Car {
     @Column()
     valuePerDay: number;
 
-    @Column("simple-array")
+    @Column("simple-array", {array: true, nullable: false})
     acessories: string[];
 
     @Column()

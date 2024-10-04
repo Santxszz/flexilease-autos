@@ -99,12 +99,20 @@ export default class CarController {
 
 	public async modify(req: Request, res: Response): Promise<Response> {
 		const id = Number.parseInt(req.params.id);
-		const { model, color, year, valuePerDay, acessories, numberOfPassengers } = req.body;
+		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
+			req.body;
 
-        const carService = new ModifyCarService();
-        const modifyCar = await carService.execute({model, color, year, valuePerDay, acessories, numberOfPassengers, id})
+		const carService = new ModifyCarService();
+		const modifyCar = await carService.execute({
+			model,
+			color,
+			year,
+			valuePerDay,
+			acessories,
+			numberOfPassengers,
+			id,
+		});
 
-        return res.status(200).json(modifyCar)
-
+		return res.status(200).json(modifyCar);
 	}
 }

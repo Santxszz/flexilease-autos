@@ -39,7 +39,7 @@ carRoutes.get(
 			color: Joi.string().optional(),
 			year: Joi.number().optional(),
 			valuePerDay: Joi.number().optional().min(1),
-			acessories: Joi.array().unique().optional(),
+			acessories: Joi.optional(),
 			numberOfPassengers: Joi.number().optional().min(1),
 		},
 	}),
@@ -84,8 +84,8 @@ carRoutes.get(
 			id: Joi.number().min(1).required(),
 		},
 	}),
-    authenticateToken,
-    carController.show
+	authenticateToken,
+	carController.show,
 );
 
 // Modify a specific car
@@ -95,18 +95,17 @@ carRoutes.patch(
 		[Segments.PARAMS]: {
 			id: Joi.number().min(1).required(),
 		},
-        [Segments.BODY]: {
+		[Segments.BODY]: {
 			model: Joi.string().optional(),
 			color: Joi.string().optional(),
 			year: Joi.number().optional(),
 			valuePerDay: Joi.number().optional().min(1),
 			acessories: Joi.array().unique().required(),
 			numberOfPassengers: Joi.number().optional().min(1),
-		}
+		},
 	}),
-    authenticateToken,
-    carController.modify
+	authenticateToken,
+	carController.modify,
 );
-
 
 export default carRoutes;

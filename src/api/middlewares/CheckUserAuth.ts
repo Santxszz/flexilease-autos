@@ -17,7 +17,7 @@ export default async function checkUserAuth(
 		process.env.JWT_SECRET as string,
 		(err, userInfo) => {
 			if (err) {
-				throw new AppError("Token is Invalid", 900);
+				throw new AppError("Token is Invalid", 400);
 			}
 			const tokenPayload = userInfo as JwtPayload;
 			if (tokenPayload.userId !== userId) {
@@ -25,5 +25,5 @@ export default async function checkUserAuth(
 			}
 		},
 	);
-    next()
+	next();
 }
