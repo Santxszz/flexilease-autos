@@ -90,6 +90,114 @@
             "400": {
               "description": "The acessories not accept another syntax! Please use [ acessories: {name: value} ] <br> The year of vehicle is invalid, must be between 1950-2023! <br> Requires at least one accessory! <br> Validate Error"
             },
+            "404": {
+              "description": "Token not informed!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "List all cars registred in system",
+          "description": "That's endpoint lists all cars registreds in the system.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "page",
+              "schema": {
+                "type": "integer",
+                "description": "The number of items to skip before starting to collect the result set"
+              }
+            },
+            {
+              "in": "query",
+              "name": "limit",
+              "schema": {
+                "type": "integer",
+                "description": "The numbers of items to return"
+              }
+            },
+            {
+              "in": "query",
+              "name": "model",
+              "schema": {
+                "type": "string",
+                "description": "The model param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "color",
+              "schema": {
+                "type": "string",
+                "description": "The color param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "year",
+              "schema": {
+                "type": "integer",
+                "description": "The year param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "valuePerDay",
+              "schema": {
+                "type": "number",
+                "description": "The valuePerDay param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "acessories",
+              "schema": {
+                "type": "array",
+                "items": {},
+                "example": [
+                  {
+                    "name": "Multmedia"
+                  }
+                ],
+                "description": "The acessories param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "numberOfPassengers",
+              "schema": {
+                "type": "integer",
+                "description": "The numberOfPassengers param for search"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Token not informed!"
+            },
             "500": {
               "description": "Internal server error"
             },
@@ -109,8 +217,8 @@
           "tags": [
             "Cars"
           ],
-          "summary": "Create a new car",
-          "description": "That's endpoint make the creation of a new car in the system.",
+          "summary": "Delete a specific car",
+          "description": "That's endpoint make the exclusion of new car in the system by your id.",
           "parameters": [
             {
               "in": "path",
@@ -125,6 +233,15 @@
           "responses": {
             "204": {
               "description": "No content"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!"
             },
             "500": {
               "description": "Internal server error"
