@@ -5,6 +5,7 @@ import ListAllCarService from "@api/services/Cars/ListAllCarService";
 import DeleteCarService from "@api/services/Cars/DeleteCarService";
 import UpdateCarService from "@api/services/Cars/UpdateCarService";
 import ShowCarService from "@api/services/Cars/ShowCarService";
+import ModifyCarService from "@api/services/Cars/ModifyCarService";
 
 export default class CarController {
 	public async create(req: Request, res: Response): Promise<Response> {
@@ -86,13 +87,24 @@ export default class CarController {
 			numberOfPassengers,
 			id,
 		});
-        return res.status(200).json(updateCar)
+		return res.status(200).json(updateCar);
 	}
 
-    public async show(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id)
-        const carService = new ShowCarService();
-        const showCar = await carService.execute(id)
-        return res.status(200).json(showCar)
-    }
+	public async show(req: Request, res: Response): Promise<Response> {
+		const id = Number(req.params.id);
+		const carService = new ShowCarService();
+		const showCar = await carService.execute(id);
+		return res.status(200).json(showCar);
+	}
+
+	public async modify(req: Request, res: Response): Promise<Response> {
+		const id = Number.parseInt(req.params.id);
+		const { model, color, year, valuePerDay, acessories, numberOfPassengers } = req.body;
+
+        const carService = new ModifyCarService();
+        const modifyCar = await carService.execute({model, color, year, valuePerDay, acessories, numberOfPassengers, id})
+
+        return res.status(200).json(modifyCar)
+
+	}
 }
