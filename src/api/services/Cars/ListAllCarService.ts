@@ -1,5 +1,4 @@
-import { AppDataSource } from "@database/index";
-import AppError from "@api/middlewares/AppError";
+import { getDataSource } from "@database/index";
 import Car from "@database/entities/Car";
 
 export default class ListAllCarService {
@@ -9,21 +8,22 @@ export default class ListAllCarService {
 		take: number,
 		search: undefined,
 	) {
-		const carRepository = AppDataSource.getRepository(Car);
+		const DataSource = await getDataSource();
+		const carRepository = DataSource.getRepository(Car);
 
 		if (!page && !take && search) {
 			const [cars, count] = await carRepository
-            .createQueryBuilder()
-            .skip(0)
-            .orWhere({ model: search })
-            .orWhere({ color: search })
-            .orWhere({ year: search })
-            .orWhere({ valuePerDay: search })
-            .orWhere({ acessories: search })
-            .orWhere({ numberOfPassengers: search })
+				.createQueryBuilder()
+				.skip(0)
+				.orWhere({ model: search })
+				.orWhere({ color: search })
+				.orWhere({ year: search })
+				.orWhere({ valuePerDay: search })
+				.orWhere({ acessories: search })
+				.orWhere({ numberOfPassengers: search })
 
-            .take(10)
-            .getManyAndCount();
+				.take(10)
+				.getManyAndCount();
 
 			const result = {
 				car: cars,
@@ -66,11 +66,6 @@ export default class ListAllCarService {
 			.skip(skip ? skip : 0)
 			.take(take ? take : 10)
 			.getManyAndCount();
-
-		// console.log(cars.length);
-		// cars.map((item) => {
-		// 	console.log(item.model);
-		// });
 
 		const result = {
 			car: cars,

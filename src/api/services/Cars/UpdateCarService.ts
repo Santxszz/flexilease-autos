@@ -1,4 +1,4 @@
-import { AppDataSource } from "@database/index";
+import { getDataSource } from "@database/index";
 import AppError from "@api/middlewares/AppError";
 import Car from "@database/entities/Car";
 import type InterfaceRequestCarUpdate from "@api/interfaces/InterfaceRequestCarUpdate";
@@ -13,7 +13,8 @@ export default class UpdateCarService {
 		numberOfPassengers,
 		id,
 	}: InterfaceRequestCarUpdate) {
-		const carRepository = AppDataSource.getRepository(Car);
+		const DataSource = await getDataSource();
+		const carRepository = DataSource.getRepository(Car);
 
 		const updateCar = await carRepository.findOne({ where: { id } });
 		if (!updateCar) {
@@ -22,13 +23,18 @@ export default class UpdateCarService {
 
 		const acessoriesArray: any[] = [];
 		acessories?.map((item: any) => {
+			if (!Object(item).hasOwnProperty("name")) {
+				throw new AppError(
+					"The acessories not accept another syntax! Please use [ acessories: {name: value} ]",
+					400,
+				);
+			}
 			acessoriesArray.push(item.name);
-			console.log(item.name);
 		});
 
 		if (Number(year) < 1950 || Number(year) > 2023) {
 			throw new AppError(
-				"The year of vehicle is invalid, must be between 1930-2023!",
+				"The year of vehicle is invalid, must be between 1950-2023!",
 			);
 		}
 

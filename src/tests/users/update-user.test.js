@@ -50,7 +50,7 @@ test("The system should update a user", async () => {
 
 test("The system must return an error if the token's userId is different from the user's id", async () => {
     const res2 = await request(app)
-		.put("/v1/user/4")
+		.put("/v1/user/102")
 		.set("Authorization", `Bearer ${user.token}`)
         .send({name: "Erikito"})
 

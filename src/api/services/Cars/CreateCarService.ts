@@ -1,4 +1,4 @@
-import { AppDataSource } from "@database/index";
+import { getDataSource } from "@database/index";
 import AppError from "@api/middlewares/AppError";
 import Car from "@database/entities/Car";
 
@@ -13,17 +13,24 @@ export default class CreateCarService {
 		acessories,
 		numberOfPassengers,
 	}: InterfaceRequestCarCreate) {
-		const carRepository = AppDataSource.getRepository(Car);
+		const DataSource = await getDataSource();
+		const carRepository = DataSource.getRepository(Car);
 
 		const acessoriesArray: any[] = [];
 		acessories.map((item: any) => {
+			if (!Object(item).hasOwnProperty("name")) {
+				throw new AppError(
+					"The acessories not accept another syntax! Please use [ acessories: {name: value} ]",
+					400,
+				);
+			}
+
 			acessoriesArray.push(item.name);
-			console.log(item.name);
 		});
 
 		if (year < 1950 || year > 2023) {
 			throw new AppError(
-				"The year of vehicle is invalid, must be between 1930-2023!",
+				"The year of vehicle is invalid, must be between 1950-2023!",
 			);
 		}
 

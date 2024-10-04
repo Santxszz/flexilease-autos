@@ -1,4 +1,4 @@
-import { AppDataSource } from "@database/index";
+import { getDataSource } from "@database/index";
 
 import User from "@database/entities/User";
 import AppError from "@api/middlewares/AppError";
@@ -9,7 +9,8 @@ interface IParamas {
 
 export default class DeleteUserService {
 	public async execute({ id }: IParamas): Promise<void> {
-		const userRepository = AppDataSource.getRepository(User);
+		const DataSource = await getDataSource();
+		const userRepository = await DataSource.getRepository(User);
 
 		const userDelete = await userRepository.findOne({
 			where: { id },

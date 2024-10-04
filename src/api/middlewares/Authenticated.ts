@@ -10,9 +10,9 @@ export default async function authenticateToken(
 	const jwt = req.headers.authorization;
     const bearerToken = jwt?.split(" ")[1];
 	if (!jwt) {
-		throw new AppError("Token not informed!", 403);
+		throw new AppError("Token not informed!", 404);
 	}
-	jwtToken.verify(String(bearerToken), process.env.JWT_SECRET as string, (err) => {
+	await jwtToken.verify(String(bearerToken), process.env.JWT_SECRET as string, (err) => {
 		if (err) {
 			throw new AppError("Token provided is invalid!", 403);
 		}

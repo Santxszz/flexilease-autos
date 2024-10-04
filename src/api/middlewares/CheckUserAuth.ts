@@ -12,16 +12,16 @@ export default async function checkUserAuth(
 	const bearerToken = userToken?.split(" ")[1];
 	const userId = Number(req.params.id);
 
-	jwt.verify(
+	await jwt.verify(
 		bearerToken as string,
 		process.env.JWT_SECRET as string,
 		(err, userInfo) => {
 			if (err) {
-				throw new AppError("Token is Invalid", 400);
+				throw new AppError("Token is Invalid", 900);
 			}
 			const tokenPayload = userInfo as JwtPayload;
 			if (tokenPayload.userId !== userId) {
-				throw new AppError("Not Authorized", 401);
+				throw new AppError("Not Authorized.", 401);
 			}
 		},
 	);

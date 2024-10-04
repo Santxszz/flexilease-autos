@@ -56,8 +56,8 @@ userRoutes.put(
 			id: Joi.number().required(),
 		},
 	}),
-    authenticateToken,
-    checkUserAuth,
+	authenticateToken,
+	checkUserAuth,
 	userController.update,
 );
 
@@ -70,7 +70,7 @@ userRoutes.delete(
 		},
 	}),
 	authenticateToken,
-    checkUserAuth,
+	checkUserAuth,
 	userController.delete,
 );
 
@@ -82,9 +82,9 @@ userRoutes.get(
 			id: Joi.string().required(),
 		},
 	}),
-    authenticateToken,
-    checkUserAuth,
-    userController.show
+	authenticateToken,
+	checkUserAuth,
+	userController.show,
 );
 
 export default userRoutes;
