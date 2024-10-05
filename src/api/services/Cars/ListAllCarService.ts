@@ -11,7 +11,7 @@ export default class ListAllCarService {
 	) {
 		const DataSource = await getDataSource();
 		const carRepository = DataSource.getRepository(Car);
-
+        
 		if (!page && !take && search) {
 			const [cars, count] = await carRepository
 				.createQueryBuilder()

@@ -16,6 +16,7 @@ import AppError from "@api/middlewares/AppError";
 
 import userRoutes from "./routes/Users.routes";
 import carRoutes from "@routes/Cars.routes";
+import reserveRoutes from "@routes/Reserve.routes";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/v1", userRoutes);
 app.use("/v1", carRoutes);
+app.use("/v1", reserveRoutes)
 app.use("/v1/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 
 app.use(errors());

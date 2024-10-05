@@ -40,7 +40,7 @@ export default class ModifyCarService {
 		}
 
 		if (updateCar.acessories.length < 1) {
-			throw new AppError("Requires at least one accessory!");
+			throw new AppError("Requires at least one accessory!", 400);
 		}
 
 		updateCar.model = model ? model : updateCar.model;

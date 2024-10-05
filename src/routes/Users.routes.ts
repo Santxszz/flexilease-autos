@@ -42,7 +42,7 @@ userRoutes.post(
 
 // Update User Informations
 userRoutes.put(
-	"/user/:id",
+	"/user/",
 	celebrate({
 		[Segments.BODY]: {
 			name: Joi.string().optional(),
@@ -52,12 +52,8 @@ userRoutes.put(
 			email: Joi.string().email().optional(),
 			password: Joi.string().optional(),
 		},
-		[Segments.PARAMS]: {
-			id: Joi.number().required(),
-		},
 	}),
 	authenticateToken,
-	checkUserAuth,
 	userController.update,
 );
 
@@ -76,14 +72,8 @@ userRoutes.delete(
 
 // Show a specific user
 userRoutes.get(
-	"/user/:id",
-	celebrate({
-		[Segments.PARAMS]: {
-			id: Joi.string().required(),
-		},
-	}),
+	"/user",
 	authenticateToken,
-	checkUserAuth,
 	userController.show,
 );
 

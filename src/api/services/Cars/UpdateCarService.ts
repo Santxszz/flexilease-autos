@@ -38,10 +38,6 @@ export default class UpdateCarService {
 			);
 		}
 
-		if (updateCar.acessories.length < 1) {
-			throw new AppError("Requires at least one accessory!");
-		}
-
 		updateCar.model = model ? model : updateCar.model;
 		updateCar.color = color ? color : updateCar.color;
 		updateCar.year = year ? year : updateCar.year;

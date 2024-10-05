@@ -4,8 +4,10 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
+    OneToMany,
 } from "typeorm";
 import { Exclude } from "class-transformer";
+import Reserve from "./Reserve";
 
 @Entity("cars")
 export class Car {
@@ -37,6 +39,12 @@ export class Car {
     @UpdateDateColumn()
     @Exclude()
     updated_at: Date;
+
+    @OneToMany(() => Reserve, (reserve) => reserve.car, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    })
+    reserve: Reserve[];
 }
 
 export default Car;
