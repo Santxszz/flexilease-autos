@@ -11,5 +11,5 @@ export default interface InterfaceRequestUserUpdate {
 	complement?: string;
 	city?: string;
 	uf?: string;
-	id: number;
+	tokenUser: string;
 }
