@@ -36,7 +36,7 @@ export default class UserController {
 
 	public async update(req: Request, res: Response): Promise<Response> {
 		const { name, cpf, birth, cep, email, password } = req.body;
-		const id = Number(req.params.id);
+		const tokenUser = String(req.headers.authorization)
 
 		const userService = new UpdateUserService();
 		const updatedUser = await userService.execute({
@@ -46,7 +46,7 @@ export default class UserController {
 			cep,
 			email,
 			password,
-			id,
+			tokenUser,
 		});
 
 		return res.status(200).json(updatedUser);
@@ -61,9 +61,9 @@ export default class UserController {
 	}
 
 	public async show(req: Request, res: Response): Promise<Response> {
-		const id = Number(req.params.id);
+		const tokenUser = String(req.headers.authorization);
 		const userService = new ShowUserInfoService();
-		const userShow = await userService.execute({ id });
+		const userShow = await userService.execute({ tokenUser });
 		return res.status(200).json(instanceToInstance(userShow));
 	}
 }

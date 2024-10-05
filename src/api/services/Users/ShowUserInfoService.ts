@@ -3,17 +3,25 @@ import { getDataSource } from "@database/index";
 import User from "@database/entities/User";
 import AppError from "@api/middlewares/AppError";
 import dayjs from "dayjs";
+import getUserTokenInfo from "@api/utils/userTokenGet";
 
-interface IParamas {
-	id: number;
+interface IToken {
+	tokenUser: string;
 }
 
 export default class ShowUserInfoService {
-	public async execute({ id }: IParamas) {
+	public async execute({ tokenUser }: IToken) {
 		const DataSource = await getDataSource();
 		const userRepository = await DataSource.getRepository(User);
-        
-		const userShow = await userRepository.findOne({ where: { id } });
+
+		const { userId }: any | undefined | string | number =
+			await getUserTokenInfo({
+				tokenUser,
+			});
+
+		const userShow = await userRepository.findOne({
+			where: { id: userId },
+		});
 
 		if (!userShow) {
 			throw new AppError("User not found.", 404);

@@ -8,6 +8,7 @@ import type InterfaceRequestUserUpdate from "@api/interfaces/InterfaceRequestUse
 import axios from "axios";
 import calcQualified from "@api/utils/verifyQualifyCategory";
 import cpfFormater from "@api/utils/cpfFunctions";
+import getUserTokenInfo from "@api/utils/userTokenGet";
 
 export default class UpdateUserService {
 	public async execute({
@@ -17,18 +18,18 @@ export default class UpdateUserService {
 		cep,
 		email,
 		password,
-		// qualified,
-		// neighbordhood,
-		// street,
-		// complement,
-		// city,
-		// uf,
-		id,
+		tokenUser,
 	}: InterfaceRequestUserUpdate) {
 		const DataSource = await getDataSource();
 		const userRepository = await DataSource.getRepository(User);
 
-		const userExists = await userRepository.findOne({ where: { id } });
+        const { userId }: any | undefined | string | number =
+        await getUserTokenInfo({
+            tokenUser,
+        });
+
+
+		const userExists = await userRepository.findOne({ where: { id: userId } });
 		if (!userExists) {
 			throw new AppError("User is not found", 404);
 		}
