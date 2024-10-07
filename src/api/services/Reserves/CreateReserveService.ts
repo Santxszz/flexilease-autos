@@ -1,9 +1,8 @@
+import { Between } from "typeorm";
+
 import { getDataSource } from "@database/index";
 import AppError from "@api/middlewares/AppError";
-import jwtToken from "jsonwebtoken";
 import Car from "@database/entities/Car";
-
-import { Between } from "typeorm";
 
 import type IReserveCreate from "@api/interfaces/InterfaceReserveCreate";
 import Reserve from "@database/entities/Reserve";
@@ -50,32 +49,31 @@ export default class CreateReserveService {
 
 		const carReserveexists = await reserveRepository.findOne({
 			where: {
-				car: carData,
+                car: carData.id as any,
 				startDate: Between(startDate, endDate),
 				endDate: Between(startDate, endDate),
+				
 			},
 
 			relations: ["car"],
 		});
 
 		if (carReserveexists) {
-			throw new AppError("That's car is already reserved.");
+			throw new AppError("That's car is already reserved.", 400);
 		}
 
 		const reserveExists = await reserveRepository.findOne({
 			where: {
 				startDate: Between(startDate, endDate),
 				endDate: Between(startDate, endDate),
-				user: userId,
+				user: userExists.id as any,
 			},
 
 			relations: ["car"],
 		});
 
 		if (reserveExists) {
-			throw new AppError(
-				`You already have reservations for this period! Car Reserved: ${reserveExists.car.model}`,
-			);
+			throw new AppError("You already have reservations for this period!", 400);
 		}
 
 		const dateInitial = dayjs(startDate);
@@ -84,7 +82,7 @@ export default class CreateReserveService {
 			dateFinal.diff(dateInitial, "days", true) * carData.valuePerDay;
 
 		if (dayjs(dateInitial).isAfter(dayjs(dateFinal))) {
-			throw new AppError("The startDate could not be before at endDate");
+			throw new AppError("The startDate could not be before at endDate", 400);
 		}
 
 		const createReserve = reserveRepository.create({

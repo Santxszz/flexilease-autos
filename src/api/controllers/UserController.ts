@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import { instanceToInstance } from "class-transformer";
 
 import CreateUserService from "@api/services/Users/CreateUserService";
-
 import UserAuthService from "@api/services/Users/UserAuthService";
 import UpdateUserService from "@api/services/Users/UpdateUserService";
 import DeleteUserService from "@api/services/Users/DeleteUserService";
@@ -36,7 +35,7 @@ export default class UserController {
 
 	public async update(req: Request, res: Response): Promise<Response> {
 		const { name, cpf, birth, cep, email, password } = req.body;
-		const tokenUser = String(req.headers.authorization)
+		const tokenUser = String(req.headers.authorization);
 
 		const userService = new UpdateUserService();
 		const updatedUser = await userService.execute({

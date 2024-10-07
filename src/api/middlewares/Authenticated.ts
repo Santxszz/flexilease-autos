@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+
 import jwtToken from "jsonwebtoken";
 import AppError from "@api/middlewares/AppError";
 

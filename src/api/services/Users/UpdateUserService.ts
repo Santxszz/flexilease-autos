@@ -1,11 +1,13 @@
 import bcrypt from "bcrypt";
 import dayjs from "dayjs";
+import axios from "axios";
 
 import { getDataSource } from "@database/index";
 import User from "@database/entities/User";
-import AppError from "@api/middlewares/AppError";
+
 import type InterfaceRequestUserUpdate from "@api/interfaces/InterfaceRequestUserUpdate";
-import axios from "axios";
+
+import AppError from "@api/middlewares/AppError";
 import calcQualified from "@api/utils/verifyQualifyCategory";
 import cpfFormater from "@api/utils/cpfFunctions";
 import getUserTokenInfo from "@api/utils/userTokenGet";
@@ -23,11 +25,10 @@ export default class UpdateUserService {
 		const DataSource = await getDataSource();
 		const userRepository = await DataSource.getRepository(User);
 
-        const { userId }: any | undefined | string | number =
-        await getUserTokenInfo({
-            tokenUser,
-        });
-
+		const { userId }: any | undefined | string | number =
+			await getUserTokenInfo({
+				tokenUser,
+			});
 
 		const userExists = await userRepository.findOne({ where: { id: userId } });
 		if (!userExists) {

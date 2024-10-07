@@ -1,6 +1,8 @@
 import type { NextFunction, Response, Request } from "express";
 import jwt from "jsonwebtoken";
+
 import AppError from "./AppError";
+
 import type JwtPayload from "@api/interfaces/InterfaceJwtPayload";
 
 export default async function checkUserAuth(

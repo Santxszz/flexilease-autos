@@ -1,13 +1,15 @@
 import bcrypt from "bcrypt";
+import dayjs from "dayjs";
+import axios from "axios";
 
 import { getDataSource } from "@database/index";
 import User from "@database/entities/User";
-import dayjs from "dayjs";
+
 import type InterfaceRequestUserCreate from "@api/interfaces/InterfaceRequestUserCreate";
+
 import AppError from "@api/middlewares/AppError";
 import nameValidation from "@api/utils/nameValidation";
 import calcQualified from "@api/utils/verifyQualifyCategory";
-import axios from "axios";
 import cpfFormater from "@api/utils/cpfFunctions";
 
 export default class CreateUserService {

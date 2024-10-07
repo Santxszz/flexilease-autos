@@ -1,6 +1,6 @@
 import { getDataSource } from "@database/index";
-
 import User from "@database/entities/User";
+
 import AppError from "@api/middlewares/AppError";
 
 interface IParamas {

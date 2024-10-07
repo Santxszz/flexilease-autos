@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { AppDataSource } from "@database/index";
 import User from "@database/entities/User";
+
 import AppError from "@api/middlewares/AppError";
 import type InterfaceAuthUser from "@api/interfaces/InterfaceAuthUser";
 

@@ -5,7 +5,7 @@ import BaseJoi, { type Extension, type Root } from "joi";
 import joiDate from "@joi/date";
 import UserController from "@api/controllers/UserController";
 import authenticateToken from "@api/middlewares/Authenticated";
-import checkUserAuth from "@api/middlewares/CheckUserAuth";
+// import checkUserAuth from "@api/middlewares/CheckUserAuth";
 const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 
 const userRoutes = express.Router();
@@ -66,7 +66,6 @@ userRoutes.delete(
 		},
 	}),
 	authenticateToken,
-	checkUserAuth,
 	userController.delete,
 );
 

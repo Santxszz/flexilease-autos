@@ -1,6 +1,7 @@
+import { Like } from "typeorm";
+
 import { getDataSource } from "@database/index";
 import Car from "@database/entities/Car";
-import { Like } from "typeorm";
 
 export default class ListAllCarService {
 	public async execute(
@@ -11,7 +12,7 @@ export default class ListAllCarService {
 	) {
 		const DataSource = await getDataSource();
 		const carRepository = DataSource.getRepository(Car);
-        
+
 		if (!page && !take && search) {
 			const [cars, count] = await carRepository
 				.createQueryBuilder()
@@ -25,7 +26,7 @@ export default class ListAllCarService {
 				.take(10)
 				.getManyAndCount();
 
-			let objectCarArray: any = [];
+			let objectCarArray: object[] = [];
 			cars.map((item) => {
 				let carAcessories: any = [];
 				item.acessories.map((x) => {
@@ -68,7 +69,7 @@ export default class ListAllCarService {
 				.take(take)
 				.getManyAndCount();
 
-			let objectCarArray: any = [];
+			let objectCarArray: object[] = [];
 			cars.map((item) => {
 				let carAcessories: any = [];
 				item.acessories.map((x) => {
@@ -104,7 +105,7 @@ export default class ListAllCarService {
 			.take(take ? take : 10)
 			.getManyAndCount();
 
-		let objectCarArray: any = [];
+		let objectCarArray: object[] = [];
 		cars.map((item) => {
 			let carAcessories: any = [];
 			item.acessories.map((x) => {
