@@ -12,6 +12,7 @@ export default class CarController {
 	public async create(req: Request, res: Response): Promise<Response> {
 		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
 			req.body;
+		const tokenUser = String(req.headers.authorization);
 
 		const carService = new CreateCarService();
 
@@ -22,6 +23,7 @@ export default class CarController {
 			valuePerDay,
 			acessories,
 			numberOfPassengers,
+			tokenUser,
 		});
 		return res.status(201).json(createCar);
 	}
@@ -29,6 +31,8 @@ export default class CarController {
 	public async listAll(req: Request, res: Response): Promise<Response> {
 		const page = Number(req.query.page);
 		const limit = Number(req.query.limit);
+
+		const tokenUser = String(req.headers.authorization);
 
 		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
 			req.query;
@@ -61,6 +65,7 @@ export default class CarController {
 			skip,
 			take,
 			search as undefined,
+			tokenUser,
 		);
 
 		return res.status(200).json(instanceToInstance(cars));
@@ -68,8 +73,10 @@ export default class CarController {
 
 	public async delete(req: Request, res: Response): Promise<Response> {
 		const id = Number.parseInt(req.params.id);
+		const tokenUser = String(req.headers.authorization);
+
 		const carService = new DeleteCarService();
-		await carService.execute({ id });
+		await carService.execute({ id, tokenUser });
 		return res.status(204).json();
 	}
 
@@ -77,6 +84,7 @@ export default class CarController {
 		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
 			req.body;
 		const id = Number(req.params.id);
+		const tokenUser = String(req.headers.authorization);
 
 		const carService = new UpdateCarService();
 		const updateCar = await carService.execute({
@@ -87,6 +95,7 @@ export default class CarController {
 			acessories,
 			numberOfPassengers,
 			id,
+			tokenUser,
 		});
 		return res.status(200).json(updateCar);
 	}
@@ -102,6 +111,7 @@ export default class CarController {
 		const id = Number.parseInt(req.params.id);
 		const { model, color, year, valuePerDay, acessories, numberOfPassengers } =
 			req.body;
+		const tokenUser = String(req.headers.authorization);
 
 		const carService = new ModifyCarService();
 		const modifyCar = await carService.execute({
@@ -112,6 +122,7 @@ export default class CarController {
 			acessories,
 			numberOfPassengers,
 			id,
+			tokenUser,
 		});
 
 		return res.status(200).json(modifyCar);
