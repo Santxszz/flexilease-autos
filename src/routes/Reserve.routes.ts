@@ -18,11 +18,40 @@ reserveRoutes.post(
 		[Segments.BODY]: {
 			startDate: Joi.date().format("DD/MM/YYYY").required(),
 			endDate: Joi.date().format("DD/MM/YYYY").required(),
-            carId: Joi.number().required()
-		}
+			carId: Joi.number().required(),
+		},
 	}),
 	authenticateToken,
 	reserveController.create,
+);
+
+// List all reserves of user
+reserveRoutes.get(
+	"/reserve",
+	celebrate({
+		[Segments.QUERY]: {
+			page: Joi.number().min(1).optional(),
+			limit: Joi.number().min(1).optional(),
+			startDate: Joi.date().format("DD/MM/YYYY").optional(),
+			endDate: Joi.date().format("DD/MM/YYYY").optional(),
+			finalValue: Joi.number().optional(),
+			carId: Joi.number().optional().min(1),
+		},
+	}),
+	authenticateToken,
+	reserveController.listAll,
+);
+
+// List a specific reserve
+reserveRoutes.get(
+	"/reserve/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().min(1).required(),
+		},
+	}),
+    authenticateToken,
+    reserveController.show
 );
 
 export default reserveRoutes;

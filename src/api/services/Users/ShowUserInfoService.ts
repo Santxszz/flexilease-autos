@@ -1,8 +1,9 @@
-import { getDataSource } from "@database/index";
-
-import User from "@database/entities/User";
-import AppError from "@api/middlewares/AppError";
 import dayjs from "dayjs";
+
+import { getDataSource } from "@database/index";
+import User from "@database/entities/User";
+
+import AppError from "@api/middlewares/AppError";
 import getUserTokenInfo from "@api/utils/userTokenGet";
 
 interface IToken {
