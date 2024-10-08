@@ -14,19 +14,19 @@ beforeAll(async () => {
 	const createUser = new CreateUserService();
 	const res = await createUser.execute({
 		name: "João Pedro Deleta",
-		cpf: "051.032.133-33",
+		cpf: "157.032.133-33",
 		birth: "2004-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "joãopausloreserva23@gmail.com",
+		email: "joãopazuszaloreserva23@gmail.com",
 		password: "123456",
 	});
 
     const res2 = await createUser.execute({
 		name: "Pedrinho Pulos Delete",
-		cpf: "242.032.943-33",
-		birth: "2020-02-20 03:00:00.000",
+		cpf: "232.552.943-33",
+		birth: "2001-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "pedrinhozpulos@gmail.com",
+		email: "pedrinhozsasspulos@gmail.com",
 		password: "123456",
 	});
 
@@ -73,15 +73,45 @@ beforeAll(async () => {
     const reserveService = new CreateReserveService()
 
     const reserve = await reserveService.execute({carId: Number(carCreated.id), endDate: "2026-11-06 03:00:00", startDate: "2026-11-04 03:00:00", tokenUser: `Bearer ${user.token}`})
+    const reserve2 = await reserveService.execute({carId: Number(carCreated.id), endDate: "2026-11-06 03:00:00", startDate: "2026-11-04 03:00:00", tokenUser: `Bearer ${user2.token}`})
     
     reserved = {...reserve}
     console.log(reserved)
 
 });
 
-test("The system should delete a reserve", async () => {
+test("The system should update a reserve", async () => {
 	const res = await request(app)
-		.delete(`/v1/reserve/${reserved.id}`)
+		.put(`/v1/reserve/${reserved.id}`)
+        .send({
+			startDate: "04/10/2030",
+			endDate: "06/10/2030",
+			carId: `${carCreated2.id}`,
+		})
 		.set("Authorization", `Bearer ${user.token}`)
-	expect(res.statusCode).toBe(204);
+	expect(res.statusCode).toBe(200);
+});
+
+test("The system should return error if users different of a user create reserve", async () => {
+	const res = await request(app)
+		.put(`/v1/reserve/${reserved.id}`)
+        .send({
+			startDate: "04/10/2030",
+			endDate: "06/10/2030",
+			carId: `${carCreated2.id}`,
+		})
+		.set("Authorization", `Bearer ${user2.token}`)
+	expect(res.statusCode).toBe(401);
+});
+
+test("The system should return error if car not found", async () => {
+	const res = await request(app)
+		.put(`/v1/reserve/${reserved.id}`)
+        .send({
+			startDate: "04/10/2030",
+			endDate: "06/10/2030",
+			carId: "99999",
+		})
+		.set("Authorization", `Bearer ${user.token}`)
+	expect(res.statusCode).toBe(404);
 });

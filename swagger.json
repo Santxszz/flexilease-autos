@@ -76,6 +76,10 @@
                         }
                       ]
                     },
+                    "valuePerDay": {
+                        "type": "number",
+                        "example": 3
+                    },
                     "numberOfPassengers": {
                       "type": "number"
                     }
@@ -854,7 +858,7 @@
                       "format": "date",
                       "example": "09/10/2024"
                     },
-                    "carid": {
+                    "carId": {
                       "type": "number",
                       "example": 1
                     }
