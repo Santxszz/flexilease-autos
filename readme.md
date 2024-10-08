@@ -35,6 +35,24 @@ Para instalar e executar este projeto, você pode seguir este passo a passo, lis
 4º Passo
 - npm run dev
 ```
+
+**Testes:** Dentro deste repositório já tem uma pasta com o reportCoverage de todo o projeto, mas caso ache necessário refazer o teste, basta seguir o passo a passo abaixo:
+```bash
+1º Passo:
+- git clone https://github.com/Santxszz/flexilease-autos
+
+2º Passo
+- cd flexilease-autos
+
+3º Passo
+- npm install
+
+4º Passo
+- npm run dev
+
+5º Passo
+- npm test
+```
 ##
 Caso tenha gostado deste projeto e surgiu o interesse de visualizar mais dos meus projetos, fique a vontade para encontrar mais nas minhas redes sociais, lá você encontra mais projetos, vídeos e muito mais!
 
