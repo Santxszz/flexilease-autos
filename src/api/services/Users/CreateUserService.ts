@@ -79,7 +79,7 @@ export default class CreateUserService {
 		const userObjectResponse = {
 			id: userCreated.id,
 			name: userCreated.name,
-			cpf: userCreated.cpf,
+			cpf: userCreated.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
 			birth: dayjs(userCreated.birth).format("DD/MM/YYYY"),
 			email: userCreated.email,
 			qualified: !!userCreated.qualified,

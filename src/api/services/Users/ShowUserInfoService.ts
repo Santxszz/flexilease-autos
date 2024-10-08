@@ -25,7 +25,7 @@ export default class ShowUserInfoService {
 		const userObjectResponse = {
 			id: userShow.id,
 			name: userShow.name,
-			cpf: userShow.cpf,
+			cpf: userShow.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
 			birth: dayjs(userShow.birth).format("DD/MM/YYYY"),
 			email: userShow.email,
 			qualified: !!userShow.qualified,

@@ -115,7 +115,7 @@ export default class UpdateUserService {
 		const userObjectResponse = {
 			id: userExists.id,
 			name: userExists.name,
-			cpf: userExists.cpf,
+			cpf: userExists.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
 			birth: dayjs(userExists.birth).format("DD/MM/YYYY"),
 			email: userExists.email,
 			qualified: userExists.qualified,
