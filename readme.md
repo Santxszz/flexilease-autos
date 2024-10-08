@@ -19,7 +19,7 @@ Segue abaixo a lista das tecnologias principais usadas no desenvolvimento deste 
 ## Instalação & Execução
 Para instalar e executar este projeto, você pode seguir este passo a passo, listado abaixo. Lembrando de se atentar as versões das dependencias.
 
-**OBS:** Neste projeto foi optado pelo uso do SQLite, então caso precise visualizar as tabelas faça o uso de uma ferramenta auxiliar como **DB Browser** ou **Heid SQL**
+**OBS:** Neste projeto foi optado pelo uso do SQLite, então caso precise visualizar as tabelas faça o uso de uma ferramenta auxiliar como **DB Browser** ou **Heid SQL**. Outro ponto bem importante é a **NECESSIDADE** de configurar o .env informando as variáveis necessárias: JWT_SECRET="Seu Segredo" - PORT_SERVER=Porta que o servidor irá rodar.
 
 
 ```bash
