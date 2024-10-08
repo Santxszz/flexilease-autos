@@ -53,8 +53,8 @@ export default class UpdateUserService {
 			const cpfExists = await userRepository.findOne({
 				where: { cpf: userExists?.cpf },
 			});
+            
 			cpf = userExists?.cpf;
-            console.log(cpf)
 			if (cpfExists && cpf !== userExists.cpf) {
 				throw new AppError("The cpf is already in use.", 400);
 			}
