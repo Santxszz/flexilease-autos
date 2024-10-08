@@ -11,20 +11,20 @@ const {
 beforeAll(async () => {
 	const createUser = new CreateUserService();
 	const res = await createUser.execute({
-		name: "João Paulo Reserva",
-		cpf: "050.032.353-33",
+		name: "João Pedro Reserva",
+		cpf: "051.032.333-33",
 		birth: "2004-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "joãopaulzoreserva@gmail.com",
+		email: "joãopauloreserva23@gmail.com",
 		password: "123456",
 	});
 
     const res2 = await createUser.execute({
 		name: "Pedrinho Pulos",
-		cpf: "243.032.333-33",
+		cpf: "242.032.333-33",
 		birth: "2020-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "pedzrinhopulos@gmail.com",
+		email: "pedrinhopulos@gmail.com",
 		password: "123456",
 	});
 
@@ -68,59 +68,18 @@ beforeAll(async () => {
     carCreated2 = {...car2}
 });
 
-test("The system should create a reserve", async () => {
+test("The system should list reserves of an user", async () => {
 	const res = await request(app)
-		.post("/v1/reserve")
+		.get("/v1/reserve")
 		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2023",
-			endDate: "06/10/2030",
-			carId: `${carCreated.id}`,
-		});
 
-
-
-	expect(res.statusCode).toBe(201);
+	expect(res.statusCode).toBe(200);
 });
 
-
-test("You must not accept reservations for a replacement car within a certain period.", async () => {
-	const res = await request(app)
-		.post("/v1/reserve")
-		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2023",
-			endDate: "06/10/2030",
-			carId: `${carCreated.id}`,
-		});
-
-	expect(res.body.message).toBe("Car reserved or your already have reserves for this period.");
-});
-
-test("The user should be qualified for create reserves", async () => {
+test("The system should return error if user not exists", async () => {
     const res = await request(app)
-		.post("/v1/reserve")
-		.set("Authorization", `Bearer ${user2.token}`)
-		.send({
-			startDate: "04/10/2024",
-			endDate: "06/10/2024",
-			carId: `${carCreated2.id}`,
-		});
+		.get("/v1/reserve")
+		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJFcmVrIiwiZW1haWwiOiJlcmVrY291dG9zYW50b3NAZ21haWwuY29tIiwiaWF0IjoxNzI4MzYwOTgxLCJleHAiOjE3Mjg0MDQxODF9.khW8LAQm4HHTuzmihI314TV1h5Dn3n4glEUMTZ_9KuE")
 
-
-	expect(res.body.message).toBe("The user is not qualifed");
-})
-
-test("If car is not exists", async () => {
-    const res = await request(app)
-		.post("/v1/reserve")
-		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2024",
-			endDate: "06/10/2024",
-			carId: "99999999",
-		});
-
-
-	expect(res.body.message).toBe("Car is not found.");
+	expect(res.statusCode).toBe(404);
 })

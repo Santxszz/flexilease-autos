@@ -4,4 +4,4 @@ node_modules
 *.env.local
 *.env.staging
 biome.json
-coverage/*
+flexilease.db
