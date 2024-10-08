@@ -603,7 +603,7 @@
                     },
                     "cep": {
                       "type": "string",
-                      "example": "764000-000"
+                      "example": "76400-000"
                     },
                     "email": {
                       "type": "string",
@@ -731,7 +731,7 @@
                     },
                     "cep": {
                       "type": "string",
-                      "example": "764000-000"
+                      "example": "76400-000"
                     },
                     "email": {
                       "type": "string",
@@ -1348,7 +1348,7 @@
             },
             "cep": {
               "type": "string",
-              "example": "764000-000"
+              "example": "76400-000"
             },
             "email": {
               "type": "string",
