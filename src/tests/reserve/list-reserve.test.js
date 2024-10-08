@@ -76,10 +76,18 @@ test("The system should list reserves of an user", async () => {
 	expect(res.statusCode).toBe(200);
 });
 
-test("The system should return error if user not exists", async () => {
+test("The system should return error if token is invalid", async () => {
     const res = await request(app)
 		.get("/v1/reserve")
-		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJFcmVrIiwiZW1haWwiOiJlcmVrY291dG9zYW50b3NAZ21haWwuY29tIiwiaWF0IjoxNzI4MzYwOTgxLCJleHAiOjE3Mjg0MDQxODF9.khW8LAQm4HHTuzmihI314TV1h5Dn3n4glEUMTZ_9KuE")
+		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJFcmVrIiwasdadaswdiZW1haWwiOiJlcmVrY291dG9zYW50b3NAZ21haWwuY29tIiwiaWF0IjoxNzI4MzYwOTgxLCJleHAiOjE3Mjg0MDQxODF9.khW8LAQm4HHTuzmihI314TV1h5Dn3n4glEUMTZ_9KuE")
+
+	expect(res.statusCode).toBe(403);
+})
+
+test("The system should return error if user is not found", async () => {
+    const res = await request(app)
+		.get("/v1/reserve")
+		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJuYW1lIjoiRTJyZWsiLCJlbWFpbCI6ImVyZWtjb3V0b3NhbnRvMnNAZ21haWwuY29tIiwiaWF0IjoxNzI4Mzk0MDQzLCJleHAiOjE3Mjg0MzcyNDN9.NICnVfkN9GSEs8-NMo8mQfFmbkL6Ynw3Mv02FLrP2D4")
 
 	expect(res.statusCode).toBe(404);
 })

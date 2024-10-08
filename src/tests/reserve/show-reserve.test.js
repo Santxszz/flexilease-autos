@@ -7,24 +7,26 @@ const {
 const {
 	default: CreateCarService,
 } = require("@api/services/Cars/CreateCarService");
+const { default: CreateReserveService } = require("@api/services/Reserves/CreateReserveService");
+const dayjs = require("dayjs");
 
 beforeAll(async () => {
 	const createUser = new CreateUserService();
 	const res = await createUser.execute({
-		name: "João Paulo Reserva",
-		cpf: "050.032.353-33",
+		name: "João Pedro Deleta",
+		cpf: "057.032.133-33",
 		birth: "2004-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "joãopaulzoreserva@gmail.com",
+		email: "joãopauszaloreserva23@gmail.com",
 		password: "123456",
 	});
 
     const res2 = await createUser.execute({
-		name: "Pedrinho Pulos",
-		cpf: "243.032.333-33",
-		birth: "2020-02-20 03:00:00.000",
+		name: "Pedrinho Pulos Delete",
+		cpf: "232.032.943-33",
+		birth: "2001-02-20 03:00:00.000",
 		cep: "76400-000",
-		email: "pedzrinhopulos@gmail.com",
+		email: "pedrinhozszpulos@gmail.com",
 		password: "123456",
 	});
 
@@ -60,65 +62,41 @@ beforeAll(async () => {
 		numberOfPassengers: 4,
 		valuePerDay: 150,
 		year: 2023,
-        tokenUser: `Bearer ${user.token}`
+        tokenUser: `Bearer ${user2.token}`
 	});
 
 
 	carCreated = { ...car };
     carCreated2 = {...car2}
+    console.log(carCreated)
+
+    const reserveService = new CreateReserveService()
+
+    const reserve = await reserveService.execute({carId: Number(carCreated.id), endDate: "2026-11-06 03:00:00", startDate: "2026-11-04 03:00:00", tokenUser: `Bearer ${user.token}`})
+    const reserve2 = await reserveService.execute({carId: Number(carCreated.id), endDate: "2026-11-06 03:00:00", startDate: "2026-11-04 03:00:00", tokenUser: `Bearer ${user2.token}`})
+    
+    reserved = {...reserve}
+    console.log(reserved)
+
 });
 
-test("The system should create a reserve", async () => {
+test("The system should show a reserve of a user", async () => {
 	const res = await request(app)
-		.post("/v1/reserve")
+		.get(`/v1/reserve/${reserved.id}`)
 		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2070",
-			endDate: "06/10/2070",
-			carId: `${carCreated.id}`,
-		});
-
-	expect(res.statusCode).toBe(201);
+	expect(res.statusCode).toBe(200);
 });
 
-
-test("You must not accept reservations for a replacement car within a certain period.", async () => {
+test("The system should return error if reserve not found", async () => {
 	const res = await request(app)
-		.post("/v1/reserve")
+		.get("/v1/reserve/312")
 		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2070",
-			endDate: "06/10/2070",
-			carId: `${carCreated.id}`,
-		});
-
-	expect(res.body.message).toBe("Car reserved or your already have reserves for this period.");
+	expect(res.statusCode).toBe(404);
 });
 
-test("The user should be qualified for create reserves", async () => {
-    const res = await request(app)
-		.post("/v1/reserve")
+test("The system should return error if user different of user create reserve", async () => {
+	const res = await request(app)
+		.get(`/v1/reserve/${reserved.id}`)
 		.set("Authorization", `Bearer ${user2.token}`)
-		.send({
-			startDate: "04/10/2024",
-			endDate: "06/10/2024",
-			carId: `${carCreated2.id}`,
-		});
-
-
-	expect(res.body.message).toBe("The user is not qualifed");
-})
-
-test("If car is not exists", async () => {
-    const res = await request(app)
-		.post("/v1/reserve")
-		.set("Authorization", `Bearer ${user.token}`)
-		.send({
-			startDate: "04/10/2024",
-			endDate: "06/10/2024",
-			carId: "99999999",
-		});
-
-
-	expect(res.body.message).toBe("Car is not found.");
-})
+	expect(res.statusCode).toBe(401);
+});
