@@ -9,48 +9,28 @@ import {
 import { Exclude } from "class-transformer";
 import Reserve from "./Reserve";
 
-@Entity("users")
-export class User {
+@Entity("cars")
+export class Car {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    name: string;
+    model: string;
 
     @Column()
-    @Exclude()
-    cpf: string;
+    color: string;
 
     @Column()
-    @Exclude()
-    password: string;
+    year: number;
 
     @Column()
-    birth: Date;
+    valuePerDay: number;
+
+    @Column("simple-array", {array: true, nullable: false})
+    acessories: string[];
 
     @Column()
-    email: string;
-
-    @Column()
-    qualified: boolean;
-
-    @Column()
-    cep: string;
-
-    @Column()
-    neighbordhood: string;
-
-    @Column()
-    street: string;
-
-    @Column()
-    complement: string;
-
-    @Column()
-    city: string;
-
-    @Column()
-    uf: string;
+    numberOfPassengers: number;
 
     @CreateDateColumn()
     @Exclude()
@@ -59,13 +39,12 @@ export class User {
     @UpdateDateColumn()
     @Exclude()
     updated_at: Date;
-    
-    @OneToMany(() => Reserve, (reserve) => reserve.user, {
+
+    @OneToMany(() => Reserve, (reserve) => reserve.car, {
         cascade: true,
         onDelete: 'CASCADE'
     })
     reserve: Reserve[];
-
 }
 
-export default User;
+export default Car;

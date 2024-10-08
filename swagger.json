@@ -1,3 +1,1462 @@
 {
-   
-}
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "FlexiLease Autos API",
+      "description": "A REST API that controls the actions of a car rental company with extreme skill"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/v1/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Cars",
+        "description": "All controllers of car module."
+      },
+      {
+        "name": "Users",
+        "description": "All controllers of user module."
+      },
+      {
+        "name": "Reserves",
+        "description": "All controlers of reserve module"
+      }
+    ],
+    "paths": {
+      "/car": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Create a new car",
+          "description": "That's endpoint make the creation of a new car in the system.",
+          "requestBody": {
+            "description": "Car Request Body ALL Required!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "model",
+                    "color",
+                    "year",
+                    "valuePerDay",
+                    "acessories",
+                    "numberOfPassengers"
+                  ],
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "example": "Honda Civic"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "black"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2009
+                    },
+                    "acessories": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        {
+                          "name": "Sound"
+                        },
+                        {
+                          "name": "Solar"
+                        }
+                      ]
+                    },
+                    "numberOfPassengers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The acessories not accept another syntax! Please use [ acessories: {name: value} ] <br> The year of vehicle is invalid, must be between 1950-2023! <br> Requires at least one accessory! <br> Validate Error"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "List all cars registred in system",
+          "description": "That's endpoint lists all cars registreds in the system.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "page",
+              "schema": {
+                "type": "integer",
+                "description": "The number of items to skip before starting to collect the result set"
+              }
+            },
+            {
+              "in": "query",
+              "name": "limit",
+              "schema": {
+                "type": "integer",
+                "description": "The numbers of items to return"
+              }
+            },
+            {
+              "in": "query",
+              "name": "model",
+              "schema": {
+                "type": "string",
+                "description": "The model param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "color",
+              "schema": {
+                "type": "string",
+                "description": "The color param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "year",
+              "schema": {
+                "type": "integer",
+                "description": "The year param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "valuePerDay",
+              "schema": {
+                "type": "number",
+                "description": "The valuePerDay param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "acessories",
+              "schema": {
+                "type": "array",
+                "items": {},
+                "example": [
+                  {
+                    "name": "Multmedia"
+                  }
+                ],
+                "description": "The acessories param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "numberOfPassengers",
+              "schema": {
+                "type": "integer",
+                "description": "The numberOfPassengers param for search"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CarsResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/car/{id}": {
+        "delete": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Delete a specific car",
+          "description": "That's endpoint make the exclusion of one car in the system by your id.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No content"
+            },
+            "400": {
+              "description": "Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Show a specific car details",
+          "description": "That's endpoint make the exibition of one car in the system by your id.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Car not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "put": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Update a car details",
+          "description": "That's endpoint make the update of a car in the system.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "description": "All fields is optional's",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "example": "Honda Civic"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "black"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2009
+                    },
+                    "acessories": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        {
+                          "name": "Sound"
+                        },
+                        {
+                          "name": "Solar"
+                        }
+                      ]
+                    },
+                    "numberOfPassengers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The acessories not accept another syntax! Please use [ acessories: {name: value} ] <br> The year of vehicle is invalid, must be between 1950-2023! <br> Requires at least one accessory! <br> Validate Error"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "patch": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Cars"
+          ],
+          "summary": "Update (PATCH) a car details",
+          "description": "That's endpoint make the update (PATH) of a car in the system.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "description": "Acessories field's required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "acessories"
+                  ],
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "example": "Honda Civic"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "black"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2009
+                    },
+                    "acessories": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        {
+                          "name": "Sound"
+                        },
+                        {
+                          "name": "Solar"
+                        }
+                      ]
+                    },
+                    "numberOfPassengers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The acessories not accept another syntax! Please use [ acessories: {name: value} ] <br> The year of vehicle is invalid, must be between 1950-2023! <br> Requires at least one accessory! <br> Validate Error<br>Requires at least one accessory!"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/auth": {
+        "post": {
+          "summary": "Make authentication of one user",
+          "description": "That's endpoint makes a authentication of user",
+          "tags": [
+            "Users"
+          ],
+          "requestBody": {
+            "description": "All fields required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "email",
+                    "password"
+                  ],
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "alexandreg@compasso.com.br"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "alexandre123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "acessToken"
+                    ],
+                    "properties": {
+                      "acessToken": {
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm5hbWUiOiJFcmVrIiwiZW1haWwiOiJlcmVrY291dG9zYW50b3NAZ21haWwuY29tIiwiaWF0IjoxNzI4MzI2MDU1LCJleHAiOjE3MjgzNjkyNTV9.7LcMEpP6ry1FzHhiuQXLJM-S25bAP8S2XVsZs33VA2g"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Email or password is incorrect or Not Exists<br>Validation Error"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/user": {
+        "post": {
+          "summary": "Create a new user",
+          "description": "That's endpoint makes a new user",
+          "tags": [
+            "Users"
+          ],
+          "requestBody": {
+            "description": "All fields required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "cpf",
+                    "birth",
+                    "cep",
+                    "email",
+                    "password"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Alexandre G."
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.000.000-02"
+                    },
+                    "birth": {
+                      "type": "string",
+                      "example": "25/02/2004"
+                    },
+                    "cep": {
+                      "type": "string",
+                      "example": "764000-000"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alexandreg@compasso.com.br"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "alexandre123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The email or cpf already in use.<br>Name is invalid remove the numbers.<br>Cep is invalid.<br>Validation Error<br>The password must be longer than 6 characters."
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/user/{id}": {
+        "delete": {
+          "summary": "Delete a specific user",
+          "description": "That's endpoint makes a exclusion of a one user by your id",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Users"
+          ],
+          "responses": {
+            "204": {
+              "description": "No content"
+            },
+            "400": {
+              "description": "Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!<br>User is not found."
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a specific user",
+          "description": "That's endpoint makes update an user by id",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Users"
+          ],
+          "requestBody": {
+            "description": "All fields required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Alexandre G."
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.000.000-02"
+                    },
+                    "birth": {
+                      "type": "string",
+                      "example": "25/02/2004"
+                    },
+                    "cep": {
+                      "type": "string",
+                      "example": "764000-000"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alexandreg@compasso.com.br"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "alexandre123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "The cpf is already in use.<br>The email already in use.<br>Cep is invalid.<br>Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "User is not found.<br>Token is not informed!<br>"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "summary": "Show a specific user",
+          "description": "That's endpoint makes a exibition of a user by your id.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Users"
+          ],
+          "responses": {
+            "200": {
+              "description": "No content",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!<br>User is not found."
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/reserve": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Reserves"
+          ],
+          "summary": "Create a new reserve",
+          "description": "That's endpoint make the creation of a new reserve of a car.",
+          "requestBody": {
+            "description": "Request Body ALL Required!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "startDate",
+                    "endDate",
+                    "carId"
+                  ],
+                  "properties": {
+                    "startDate": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "07/10/2024"
+                    },
+                    "endDate": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "09/10/2024"
+                    },
+                    "carid": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Reserve"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The user is not qualifed <br> Car reserved or your already have reserves for this period.<br>The startDate could not be before at endDate<br>Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed<br>The user is not found.<br>Car is not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Reserves"
+          ],
+          "summary": "List all reserves of one user",
+          "description": "That's endpoint lists all reserves registreds by user in system.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "page",
+              "schema": {
+                "type": "integer",
+                "description": "The number of items to skip before starting to collect the result set"
+              }
+            },
+            {
+              "in": "query",
+              "name": "limit",
+              "schema": {
+                "type": "integer",
+                "description": "The numbers of items to return"
+              }
+            },
+            {
+              "in": "query",
+              "name": "carIdd",
+              "schema": {
+                "type": "number",
+                "description": "The carId param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "finalValue",
+              "schema": {
+                "type": "number",
+                "description": "The finalValue param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "startDate",
+              "schema": {
+                "type": "string",
+                "format": "date",
+                "description": "The startDate param for search"
+              }
+            },
+            {
+              "in": "query",
+              "name": "endDate",
+              "schema": {
+                "type": "string",
+                "format": "date",
+                "description": "The endDate param for search"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservesResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!<br>User is not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      },
+      "/reserve/{id}": {
+        "delete": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Reserves"
+          ],
+          "summary": "Delete a specific reserve",
+          "description": "That's endpoint make the exclusion of one reserve by your id",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No content"
+            },
+            "400": {
+              "description": "Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!<br>User is not found<br>Reserve not found<br>"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Reserves"
+          ],
+          "summary": "Show a specific reserve",
+          "description": "That's endpoint make the exibition of one reserve by your id",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "No content",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "startDate",
+                      "endDate",
+                      "finalValue",
+                      "userId",
+                      "carId"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "startDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "25/02/2004"
+                      },
+                      "endDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "25/02/2004"
+                      },
+                      "finalValue": {
+                        "type": "number",
+                        "example": 2
+                      },
+                      "userId": {
+                        "type": "number",
+                        "example": 2
+                      },
+                      "carId": {
+                        "type": "number",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed!<br>User is not found<br>Reserve not found<br>"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        },
+        "put": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Reserves"
+          ],
+          "summary": "Create a new reserve",
+          "description": "That's endpoint make the creation of a new reserve of a car.",
+          "parameters": [
+            {
+              "in": "path",
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": "id",
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "startDate": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "07/10/2024"
+                    },
+                    "endDate": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "09/10/2024"
+                    },
+                    "carid": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Reserve"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "The user is not qualifed <br> Car reserved or your already have reserves for this period.<br>The startDate could not be before at endDate<br>Token is invalid"
+            },
+            "401": {
+              "description": "Not Authorized."
+            },
+            "403": {
+              "description": "Token provided is invalid!"
+            },
+            "404": {
+              "description": "Token not informed<br>The user is not found.<br>Car is not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "default": {
+              "description": "Unexpected error"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "Car": {
+          "type": "object",
+          "required": [
+            "id",
+            "model",
+            "color",
+            "year",
+            "valuePerDay",
+            "acessories",
+            "numberOfPassengers"
+          ],
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "model": {
+              "type": "string",
+              "example": "Honda Civic"
+            },
+            "color": {
+              "type": "string",
+              "example": "black"
+            },
+            "year": {
+              "type": "number",
+              "example": 2009
+            },
+            "acessories": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "name": "Sound"
+                },
+                {
+                  "name": "Solar"
+                }
+              ]
+            },
+            "numberOfPassengers": {
+              "type": "number"
+            }
+          }
+        },
+        "CarsResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "model": {
+              "type": "string",
+              "example": "Chevette SL Turbo"
+            },
+            "color": {
+              "type": "string",
+              "example": "blue"
+            },
+            "year": {
+              "type": "integer",
+              "example": 1990
+            },
+            "acessories": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "name": "Sound"
+                },
+                {
+                  "name": "Air Condition"
+                }
+              ]
+            },
+            "numberOfPassengers": {
+              "type": "number",
+              "example": 4
+            },
+            "total": {
+              "type": "number",
+              "example": 10
+            },
+            "limit": {
+              "type": "number",
+              "example": 1
+            },
+            "offset": {
+              "type": "number",
+              "example": 1
+            },
+            "offsets": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "User": {
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "cpf",
+            "birth",
+            "email",
+            "qualified",
+            "cep",
+            "neighbordhood",
+            "street",
+            "complement",
+            "city",
+            "uf"
+          ],
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "example": "Alexandre G."
+            },
+            "cpf": {
+              "type": "string",
+              "example": "123.000.000-02"
+            },
+            "birth": {
+              "type": "string",
+              "example": "25/02/2004"
+            },
+            "cep": {
+              "type": "string",
+              "example": "764000-000"
+            },
+            "email": {
+              "type": "string",
+              "example": "alexandreg@compasso.com.br"
+            },
+            "qualified": {
+              "type": "boolean",
+              "example": true
+            },
+            "neighbordhood": {
+              "type": "string",
+              "example": "Bairro"
+            },
+            "street": {
+              "type": "string",
+              "example": "Rua"
+            },
+            "complement": {
+              "type": "string",
+              "example": "Complemento"
+            },
+            "city": {
+              "type": "string",
+              "example": "Cidade"
+            },
+            "uf": {
+              "type": "string",
+              "example": "GO"
+            }
+          }
+        },
+        "Reserve": {
+          "type": "object",
+          "required": [
+            "startDate",
+            "endDate",
+            "finalValue",
+            "carId",
+            "userId"
+          ],
+          "properties": {
+            "startDate": {
+              "type": "string",
+              "format": "date",
+              "example": "07/10/2024"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date",
+              "example": "09/10/2024"
+            },
+            "finalValue": {
+              "type": "string",
+              "example": "R$ 1.500,00"
+            },
+            "carId": {
+              "type": "number",
+              "example": 1
+            },
+            "userId": {
+              "type": "number",
+              "example": 2
+            }
+          }
+        },
+        "ReservesResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date",
+              "example": "25/02/2004"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date",
+              "example": "25/02/2004"
+            },
+            "finalValue": {
+              "type": "number",
+              "example": 1990
+            },
+            "userId": {
+              "type": "number",
+              "example": 2
+            },
+            "carId": {
+              "type": "number",
+              "example": 4
+            },
+            "total": {
+              "type": "number",
+              "example": 10
+            },
+            "limit": {
+              "type": "number",
+              "example": 1
+            },
+            "offset": {
+              "type": "number",
+              "example": 1
+            },
+            "offsets": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        }
+      }
+    }
+  }

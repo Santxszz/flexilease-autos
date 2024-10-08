@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
+
 import jwtToken from "jsonwebtoken";
-import AppError from "./AppError";
+import AppError from "@api/middlewares/AppError";
 
 export default async function authenticateToken(
 	req: Request,
@@ -8,20 +9,17 @@ export default async function authenticateToken(
 	next: NextFunction,
 ) {
 	const jwt = req.headers.authorization;
+	const bearerToken = jwt?.split(" ")[1];
 	if (!jwt) {
-		return res.status(401).json({ Erro: "Falta o Token" });
+		throw new AppError("Token not informed!", 404);
 	}
-	jwtToken.verify(
-		String(jwt),
+	await jwtToken.verify(
+		String(bearerToken),
 		process.env.JWT_SECRET as string,
-		(err, userInfo) => {
+		(err) => {
 			if (err) {
-				throw new AppError('Token provided is invalid!', 403, 'Forbidden')
+				throw new AppError("Token provided is invalid!", 403);
 			}
-			console.log(userInfo);
-			res.status(200).json({
-				"Boas-Vindas": userInfo,
-			});
 			next();
 		},
 	);
