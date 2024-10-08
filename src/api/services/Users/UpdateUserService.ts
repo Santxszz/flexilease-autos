@@ -20,6 +20,7 @@ export default class UpdateUserService {
 		cep,
 		email,
 		password,
+        id,
 		tokenUser,
 	}: InterfaceRequestUserUpdate) {
 		const DataSource = await getDataSource();
@@ -53,14 +54,15 @@ export default class UpdateUserService {
 				where: { cpf: userExists?.cpf },
 			});
 			cpf = userExists?.cpf;
-			if (cpfExists && cpf !== cpfExists.cpf) {
+            console.log(cpf)
+			if (cpfExists && cpf !== userExists.cpf) {
 				throw new AppError("The cpf is already in use.", 400);
 			}
 		} else {
 			const cpfExists = await userRepository.findOne({
 				where: { cpf: userExists?.cpf },
 			});
-			if (cpfExists && cpf !== cpfExists.cpf) {
+			if (cpfExists && cpf !== userExists.cpf) {
 				throw new AppError("The cpf is already in use.", 400);
 			}
 		}

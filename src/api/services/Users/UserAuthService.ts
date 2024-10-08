@@ -13,7 +13,7 @@ export default class UserAuthService {
 
 		const findUserByEmail = await userRepository.findOne({ where: { email } });
 		if (!findUserByEmail) {
-			throw new AppError("Email or password is incorrect", 400);
+			throw new AppError("Email or password is incorrect or Not Exists", 400);
 		}
 
 		const decodedPassword = await bcrypt.compare(
@@ -34,6 +34,6 @@ export default class UserAuthService {
 			return userToken;
 		}
 
-		throw new AppError("Email or Password is Incorrect!", 400);
+		throw new AppError("Email or Password is Incorrect or Not Exists", 400);
 	}
 }

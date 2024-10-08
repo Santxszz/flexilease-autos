@@ -5,6 +5,7 @@ import BaseJoi, { type Extension, type Root } from "joi";
 import joiDate from "@joi/date";
 import UserController from "@api/controllers/UserController";
 import authenticateToken from "@api/middlewares/Authenticated";
+import checkUserAuth from "@api/middlewares/CheckUserAuth";
 // import checkUserAuth from "@api/middlewares/CheckUserAuth";
 const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 
@@ -42,7 +43,7 @@ userRoutes.post(
 
 // Update User Informations
 userRoutes.put(
-	"/user/",
+	"/user/:id",
 	celebrate({
 		[Segments.BODY]: {
 			name: Joi.string().optional(),
@@ -52,8 +53,12 @@ userRoutes.put(
 			email: Joi.string().email().optional(),
 			password: Joi.string().optional(),
 		},
+        [Segments.PARAMS]: {
+            id: Joi.number().required()
+        }
 	}),
 	authenticateToken,
+    checkUserAuth,
 	userController.update,
 );
 
@@ -66,13 +71,15 @@ userRoutes.delete(
 		},
 	}),
 	authenticateToken,
+    checkUserAuth,
 	userController.delete,
 );
 
 // Show a specific user
 userRoutes.get(
-	"/user",
+	"/user/:id",
 	authenticateToken,
+    checkUserAuth,
 	userController.show,
 );
 

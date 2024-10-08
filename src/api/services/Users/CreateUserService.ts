@@ -24,27 +24,25 @@ export default class CreateUserService {
 		const DataSource = await getDataSource();
 		const userRepository = DataSource.getRepository(User);
 
-		// Validate Length Password
 		if (password.length < 6) {
 			throw new AppError("The password must be longer than 6 characters.", 400);
 		}
 
-        // Format and Validate CPF
-        const cpfFormated = await cpfFormater(cpf)
+		const cpfFormated = await cpfFormater(cpf);
 
-		// Search if User Exists
-		const cpfExists = await userRepository.findOne({ where: { cpf: cpfFormated } });
+		const cpfExists = await userRepository.findOne({
+			where: { cpf: cpfFormated },
+		});
 		const emailExists = await userRepository.findOne({ where: { email } });
 		if (cpfExists || emailExists) {
 			throw new AppError("The email or cpf already in use.", 400);
 		}
 
-		// Validate Name
 		if (nameValidation(name)) {
 			throw new AppError("Name is invalid remove the numbers.", 400);
 		}
 
-		const apiViaCep = await axios.create({
+		const apiViaCep = axios.create({
 			baseURL: "https://viacep.com.br/ws/",
 			timeout: 1000,
 			validateStatus: (status) => {
@@ -57,10 +55,8 @@ export default class CreateUserService {
 			throw new AppError("Cep is invalid.", 400);
 		}
 
-		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 8);
 
-		// Verify birth
 		const isQualified = await calcQualified(birth);
 
 		const userCreated = await userRepository.create({

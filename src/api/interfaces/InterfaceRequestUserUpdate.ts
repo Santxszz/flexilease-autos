@@ -12,4 +12,5 @@ export default interface InterfaceRequestUserUpdate {
 	city?: string;
 	uf?: string;
 	tokenUser: string;
+    id: number;
 }

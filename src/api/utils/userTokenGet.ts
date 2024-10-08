@@ -16,17 +16,4 @@ export default async function getUserTokenInfo({tokenUser}: ITokenValidate) {
 
     const returnJwt = jwtToken.verify(bearerToken, process.env.JWT_SECRET as string)
     return returnJwt
-
-		// let infoUser;
-		// await jwtToken.verify(
-		// 	String(bearerToken),
-		// 	process.env.JWT_SECRET as string,
-		// 	(err, userInfo) => {
-		// 		if (err) {
-		// 			throw new AppError("Token provided is invalid!", 403);
-		// 		}
-
-		// 		infoUser = userInfo;
-		// 	},
-		// );
 }

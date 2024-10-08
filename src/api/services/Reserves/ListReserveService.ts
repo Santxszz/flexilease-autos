@@ -4,6 +4,8 @@ import { Equal } from "typeorm";
 import { getDataSource } from "@database/index";
 import Reserve from "@database/entities/Reserve";
 import getUserTokenInfo from "@api/utils/userTokenGet";
+import User from "@database/entities/User";
+import AppError from "@api/middlewares/AppError";
 
 export default class ListReserveService {
 	public async execute(
@@ -15,11 +17,20 @@ export default class ListReserveService {
 	) {
 		const DataSource = await getDataSource();
 		const reserveRepository = DataSource.getRepository(Reserve);
+		const userRepository = DataSource.getRepository(User);
 
 		const { userId }: any | undefined | string | number =
 			await getUserTokenInfo({
 				tokenUser,
 			});
+
+		const userExists = await userRepository.findOne({
+			where: { id: userId },
+		});
+
+		if (!userExists) {
+			throw new AppError("User not found.", 404);
+		}
 
 		if (search) {
 			const [reserves, count] = await reserveRepository

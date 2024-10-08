@@ -6,4 +6,5 @@ export default interface InterfaceRequestCarUpdate {
 	acessories?: string[];
 	numberOfPassengers?: number;
 	id?: number;
+    tokenUser: string;
 }

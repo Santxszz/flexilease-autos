@@ -12,7 +12,7 @@ export default async function checkUserAuth(
 ) {
 	const userToken = req.headers.authorization;
 	const bearerToken = userToken?.split(" ")[1];
-	const userId = Number(req.body.userId);
+	const userId = Number(req.body.userId) || Number(req.params.id);
 
 	await jwt.verify(
 		bearerToken as string,

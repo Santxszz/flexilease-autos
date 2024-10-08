@@ -5,4 +5,5 @@ export default interface InterfaceRequestCarCreate {
 	valuePerDay: number;
 	acessories: string[];
 	numberOfPassengers: number;
+    tokenUser: string;
 }

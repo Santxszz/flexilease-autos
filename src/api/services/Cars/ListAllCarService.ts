@@ -2,6 +2,9 @@ import { Like } from "typeorm";
 
 import { getDataSource } from "@database/index";
 import Car from "@database/entities/Car";
+import getUserTokenInfo from "@api/utils/userTokenGet";
+import AppError from "@api/middlewares/AppError";
+import User from "@database/entities/User";
 
 export default class ListAllCarService {
 	public async execute(
@@ -9,9 +12,24 @@ export default class ListAllCarService {
 		skip: number,
 		take: number,
 		search: undefined,
+		tokenUser: string,
 	) {
 		const DataSource = await getDataSource();
 		const carRepository = DataSource.getRepository(Car);
+		const userRepository = DataSource.getRepository(User);
+
+		const { userId }: any | undefined | string | number =
+			await getUserTokenInfo({
+				tokenUser,
+			});
+
+		const userExists = await userRepository.findOne({
+			where: { id: userId },
+		});
+
+		if (!userExists) {
+			throw new AppError("User is not found", 404);
+		}
 
 		if (!page && !take && search) {
 			const [cars, count] = await carRepository

@@ -4,24 +4,18 @@ import { getDataSource } from "@database/index";
 import User from "@database/entities/User";
 
 import AppError from "@api/middlewares/AppError";
-import getUserTokenInfo from "@api/utils/userTokenGet";
 
-interface IToken {
-	tokenUser: string;
+interface IParams {
+	id: number;
 }
 
 export default class ShowUserInfoService {
-	public async execute({ tokenUser }: IToken) {
+	public async execute({ id }: IParams) {
 		const DataSource = await getDataSource();
 		const userRepository = await DataSource.getRepository(User);
 
-		const { userId }: any | undefined | string | number =
-			await getUserTokenInfo({
-				tokenUser,
-			});
-
 		const userShow = await userRepository.findOne({
-			where: { id: userId },
+			where: { id },
 		});
 
 		if (!userShow) {

@@ -3,6 +3,8 @@ import AppError from "@api/middlewares/AppError";
 import Car from "@database/entities/Car";
 
 import type InterfaceRequestCarCreate from "@api/interfaces/InterfaceRequestCarCreate";
+import getUserTokenInfo from "@api/utils/userTokenGet";
+import User from "@database/entities/User";
 
 export default class CreateCarService {
 	public async execute({
@@ -12,9 +14,24 @@ export default class CreateCarService {
 		valuePerDay,
 		acessories,
 		numberOfPassengers,
+		tokenUser,
 	}: InterfaceRequestCarCreate) {
 		const DataSource = await getDataSource();
 		const carRepository = DataSource.getRepository(Car);
+		const userRepository = DataSource.getRepository(User);
+
+		const { userId }: any | undefined | string | number =
+			await getUserTokenInfo({
+				tokenUser,
+			});
+
+		const userExists = await userRepository.findOne({
+			where: { id: userId },
+		});
+
+		if (!userExists) {
+			throw new AppError("User is not found", 404);
+		}
 
 		const acessoriesArray: any[] = [];
 		acessories.map((item: any) => {
