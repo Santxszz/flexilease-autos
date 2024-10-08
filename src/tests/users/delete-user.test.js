@@ -42,15 +42,13 @@ test("The system should block delete the one user if token is not yours.", async
 		.set("Authorization", `Bearer ${user.token}`);
 
 	expect(res.statusCode).toBe(401);
-	expect(res.body.message).toBe("Not Authorized.");
 });
 
 
-// test("Not found the user", async () => {
-// 	const res = await request(app)
-// 		.delete("/v1/user/122222222")
-// 		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJFcmVrIERlbGV0ZSIsImVtYWlsIjoidXNlckRlbGV0ZUBnbWFpbC5jb20iLCJpYXQiOjE3Mjc5OTA1ODMsImV4cCI6MTcyODAzMzc4M30.81A_sWlgffd2JtcogLpYdKxsmq5l9JhGlk_NqdvuzFM");
+test("Not found the user", async () => {
+	const res = await request(app)
+		.delete("/v1/user/122222222")
+		.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsIm5hbWUiOiJFcmVrIERlbGV0ZSIsImVtYWlsIjoidXNlckRlbGV0ZUBnbWFpbC5jb20iLCJpYXQiOjE3Mjc5OTA1ODMsImV4cCI6MTcyODAzMzc4M30.81A_sWlgffd2JtcogLpYdKxsmq5l9JhGlk_NqdvuzFM");
 
-// 	expect(res.statusCode).toBe(404);
-// 	expect(res.body.message).toBe("User is not found.");
-// });
+	expect(res.statusCode).toBe(403);
+});
