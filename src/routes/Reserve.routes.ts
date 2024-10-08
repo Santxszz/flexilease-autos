@@ -50,8 +50,37 @@ reserveRoutes.get(
 			id: Joi.number().min(1).required(),
 		},
 	}),
+	authenticateToken,
+	reserveController.show,
+);
+
+// Update a specific reserve
+reserveRoutes.put(
+	"/reserve/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().min(1).required(),
+		},
+		[Segments.BODY]: {
+			startDate: Joi.date().format("DD/MM/YYYY").optional(),
+			endDate: Joi.date().format("DD/MM/YYYY").optional(),
+			carId: Joi.number().min(1).optional(),
+		},
+	}),
+	authenticateToken,
+	reserveController.update,
+);
+
+// Delete a specific reserve
+reserveRoutes.delete(
+	"/reserve/:id",
+	celebrate({
+		[Segments.PARAMS]: {
+			id: Joi.number().min(1).required(),
+		},
+	}),
     authenticateToken,
-    reserveController.show
+    reserveController.delete
 );
 
 export default reserveRoutes;

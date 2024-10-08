@@ -20,7 +20,6 @@ export default class CreateReserveService {
 		tokenUser,
 	}: IReserveCreate) {
 		const DataSource = await getDataSource();
-
 		const reserveRepository = DataSource.getRepository(Reserve);
 		const carRepository = DataSource.getRepository(Car);
 		const userRepository = DataSource.getRepository(User);
@@ -47,33 +46,38 @@ export default class CreateReserveService {
 			throw new AppError("Car is not found.", 404);
 		}
 
-		const carReserveexists = await reserveRepository.findOne({
-			where: {
-                car: carData.id as any,
-				startDate: Between(startDate, endDate),
-				endDate: Between(startDate, endDate),
-				
-			},
-
-			relations: ["car"],
-		});
-
-		if (carReserveexists) {
-			throw new AppError("That's car is already reserved.", 400);
-		}
-
 		const reserveExists = await reserveRepository.findOne({
 			where: {
+				user: userExists.id as any,
 				startDate: Between(startDate, endDate),
 				endDate: Between(startDate, endDate),
-				user: userExists.id as any,
 			},
 
 			relations: ["car"],
 		});
 
 		if (reserveExists) {
-			throw new AppError("You already have reservations for this period!", 400);
+			throw new AppError(
+				"Car reserved or your already have reserves for this period.",
+				400,
+			);
+		}
+
+		const carReserveexists = await reserveRepository.findOne({
+			where: {
+				car: carData.id as any,
+				startDate: Between(startDate, endDate),
+				endDate: Between(startDate, endDate),
+			},
+
+			relations: ["car"],
+		});
+
+		if (carReserveexists) {
+			throw new AppError(
+				"Car reserved or your already have reserves for this period.",
+				400,
+			);
 		}
 
 		const dateInitial = dayjs(startDate);
