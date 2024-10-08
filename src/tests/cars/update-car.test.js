@@ -12,15 +12,6 @@ beforeAll(async () => {
 	const createUser = new CreateUserService();
 	const createCar = new CreateCarService();
 
-	const resCar = await createCar.execute({
-		model: "SHOW CAR",
-		color: "gray",
-		year: 1999,
-		valuePerDay: 15,
-		acessories: [{ name: "Acessorios" }],
-		numberOfPassengers: 5,
-	});
-
 	const res = await createUser.execute({
 		name: "User Car Test Update",
 		cpf: "000.000.223-13",
@@ -31,19 +22,33 @@ beforeAll(async () => {
 	});
 
 	user = { ...res };
-	car = { ...resCar };
-	const jwtPayload = {
+
+    const jwtPayload = {
 		userId: user.id,
 		name: user.name,
 		email: user.email,
 	};
 	user.token = jwt.sign(jwtPayload, process.env.JWT_SECRET);
+    
+	const resCar = await createCar.execute({
+		model: "SHOW CAR",
+		color: "gray",
+		year: 1999,
+		valuePerDay: 15,
+		acessories: [{ name: "Acessorios" }],
+		numberOfPassengers: 5,
+        tokenUser: `Bearer ${user.token}`
+	});
+
+
+	car = { ...resCar };
+
 });
 
 test("The system should update a specific car", async () => {
 	const res = await request(app)
 		.put(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
         .send({model: "Altered By Unit Test"})
 
 	expect(res.statusCode).toBe(200);
@@ -54,7 +59,7 @@ test("The system should update a specific car", async () => {
 test("Model car year have to between 1950 and 2023", async () => {
     const res = await request(app)
 		.put(`/v1/car/${car.id}`)
-        .set("Authorization", `Bearer ${user.token}`)
+        .set("authorization", `Bearer ${user.token}`)
 		.send({
 			year: 1920,
 		});
@@ -65,7 +70,7 @@ test("Model car year have to between 1950 and 2023", async () => {
 test("Acessories do not have property different's [acessories: {name: value}]", async () => {
     const res = await request(app)
 		.put(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",

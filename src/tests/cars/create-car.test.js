@@ -31,7 +31,7 @@ beforeAll(async () => {
 test("The system should create a car", async () => {
 	const res = await request(app)
 		.post("/v1/car")
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",
@@ -60,7 +60,7 @@ test("The system should create a car", async () => {
 test("Should have at least one acessorie", async () => {
 	const res = await request(app)
 		.post("/v1/car")
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",
@@ -76,7 +76,7 @@ test("Should have at least one acessorie", async () => {
 test("Model car year have to between 1950 and 2023", async () => {
 	const res = await request(app)
 		.post("/v1/car")
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",
@@ -94,7 +94,7 @@ test("Model car year have to between 1950 and 2023", async () => {
 test("Acessories do not have property different's [acessories: {name: value}]", async () => {
     const res = await request(app)
 		.post("/v1/car")
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",

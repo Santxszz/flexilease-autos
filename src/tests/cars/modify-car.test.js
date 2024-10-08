@@ -12,16 +12,7 @@ beforeAll(async () => {
 	const createUser = new CreateUserService();
 	const createCar = new CreateCarService();
 
-	const resCar = await createCar.execute({
-		model: "MODIFY CAR",
-		color: "blue",
-		year: 1999,
-		valuePerDay: 15,
-		acessories: [{ name: "Acessorios" }],
-		numberOfPassengers: 5,
-	});
-
-	const res = await createUser.execute({
+    const res = await createUser.execute({
 		name: "User Car Test Modify",
 		cpf: "000.099.223-13",
 		birth: "25/02/2004",
@@ -31,19 +22,32 @@ beforeAll(async () => {
 	});
 
 	user = { ...res };
-	car = { ...resCar };
-	const jwtPayload = {
+    const jwtPayload = {
 		userId: user.id,
 		name: user.name,
 		email: user.email,
 	};
 	user.token = jwt.sign(jwtPayload, process.env.JWT_SECRET);
+
+	const resCar = await createCar.execute({
+		model: "MODIFY CAR",
+		color: "blue",
+		year: 1999,
+		valuePerDay: 15,
+		acessories: [{ name: "Acessorios" }],
+		numberOfPassengers: 5,
+        tokenUser: `Bearer ${user.token}`
+	});
+
+
+	car = { ...resCar };
+	
 });
 
 test("The system should update a specific car", async () => {
 	const res = await request(app)
 		.patch(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "Altered By Unit Test",
 			acessories: [{ name: "Acessório" }],
@@ -55,7 +59,7 @@ test("The system should update a specific car", async () => {
 test("Model car year have to between 1950 and 2023", async () => {
 	const res = await request(app)
 		.patch(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			acessories: [{ name: "Teste" }],
 			year: 1920,
@@ -68,7 +72,7 @@ test("Model car year have to between 1950 and 2023", async () => {
 test("Acessories fild is required", async () => {
 	const res = await request(app)
 		.patch(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			model: "GM S10 2.8",
 			color: "white",
@@ -83,7 +87,7 @@ test("Acessories fild is required", async () => {
 test("Acessories do not have property different's [acessories: {name: value}]", async () => {
 	const res = await request(app)
     .patch(`/v1/car/${car.id}`)
-		.set("Authorization", `Bearer ${user.token}`)
+		.set("authorization", `Bearer ${user.token}`)
 		.send({
 			acessories: [{ "name": "A" }, { "acessorio": "123" }]
 		});
