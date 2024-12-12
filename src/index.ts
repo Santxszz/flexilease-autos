@@ -31,7 +31,6 @@ app.use("/v1/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 
 app.use(errors());
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(
 	(error: Error, request: Request, response: Response, next: NextFunction) => {
 		if (error instanceof AppError) {
